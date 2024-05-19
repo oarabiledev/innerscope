@@ -15,17 +15,16 @@ download the .not-like-us Folder.
 
 Then create the typical index.html file.
 
-```html
-<!DOCTYPE html>
+```html<!DOCTYPE html>
 <html>
 <head>
     <title>Euphoria PreView</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script type="module" src=".not-like-us/index.mjs"></script>
+    <script src=".not-like-us/index.js"></script>
     <style>
         body, html {
-            width: 100vw;
-            height: 100vw;
+            width: 100%;
+            height: 100%;
             margin: 0;
             padding: 0;
              /* Prevent horizontal scrolling */
@@ -35,11 +34,11 @@ Then create the typical index.html file.
             height: 100vh; /* 100% of the viewport height */
         }
     </style>
-<script type="module" src="App.mjs"></script>
+
 </head>
 
 <body id="AppContainer">
-    
+    <script src="App.js"></script>
 </body>
 
 </html>
@@ -48,34 +47,20 @@ Then create the typical index.html file.
 After this, we add our App.mjs file where all ui is called.
 
 ```javascript
-import app from "./.not-like-us/index.mjs"
 
-/**
- * Here is the default code structure.
- */
-class Application{
+class Application {
 	OnStart(){
 
-	}
+		this.lay = ui.createLayout('Linear','FillXY');
+		this.lay.setBackColor()
 
-	OnBack(){
-
-	}
-
-	OnPause(){
-		
-	}
-
-	OnResume(){
+		ui.addLayout(this.lay)
 
 	}
-
-	OnConfig(){
-
-	}
+	
 }
 
-export default Application;
+window.Application = Application;
 ```
 
 If you dont understand hoe to use, check DroidScript Docs, only interface methods are supported.
