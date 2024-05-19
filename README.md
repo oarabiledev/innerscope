@@ -29,7 +29,8 @@ type gymnastics, you dont need tsx -> jsx -> html + js.
 
 
 Its too complex, programming is a hobbie to me and me having to learn flavoured linters
-to maximise productivity and virtual DOM's instead of using in-built DOM Api's.
+to maximise productivity and virtual DOM's instead of using in-built DOM Api's, is 
+un-appealing.
 
 
 
@@ -37,35 +38,36 @@ Dont get me wrong i understand why frameworks exist, but they
 just leave bitterness in my mouth.
 
 
-Ohh so now React has a compiler, javascript to javascript {{{(>_<)}}}
+*Ohh so now React has a compiler, javascript to javascript {{{(>_<)}}}*
 
 
-Compiling from Trash Javascript to Better Javascript
+*Ohh so now Vue is getting Vapor*
 
+**And also**
 
-Ohh so now Vue is getting Vapor
-
-And also
-
-
-Re-write all javascript tooling in Rust, in five years Go gets better and 
+*Re-write all javascript tooling in Rust, in five years Go gets better and 
 we should migrate, literally some jibrish language comes out and re-write 
-to it...
-
-Yes, i have to catch up-to recency or else ill be booted out, I understand,
-however this is getting bad, newbies are not vibing to this..
+to it...*
 
 
+> "Yes, i have to catch up-to recency or else ill be booted out, I understand,
+however this is getting bad, I'm not vibing to this (┬┬﹏┬┬)"
 
-### A proof of concept to the framework dudes.
+
+<br/>
+
+## A proof of concept to the framework dudes.
 
 
 Euphoria, by code is inspired by the DroidScript Framework, to get a basic application working, 
-download the .not-like-us Folder.
+download the **.not-like-us** Folder.
 
 Then create the typical index.html file.
 
-```html<!DOCTYPE html>
+<br/>
+
+```html
+<!DOCTYPE html>
 <html>
 <head>
     <title>Euphoria PreView</title>
@@ -94,8 +96,8 @@ Then create the typical index.html file.
 </html>
 ```
 
-After this, we add our App.mjs file where all ui is called.
-
+After this, we add our App.js file where all ui is called.
+<br/>
 ```javascript
 
 class Application {
@@ -109,9 +111,32 @@ class Application {
 
 window.Application = Application;
 ```
-
-This simple set-up will produce code which looks like this:
+<br/>
+This simple set-up will produce an interface which looks like this:
 
 <img src="https://drive.google.com/uc?export=view&id=1Xi32itWW_3Iy_tfYcxIkueTA2NNAFp2U">
+
+
+<br/>
+
+## The Almost Gray Part ＞﹏＜
+
+Euphoria is far from ready to production use, Euphoria will include an app* bunch of methods
+to call the browser interface, simply no styling.
+
+Also 
+
+Euphoria's ui* methods will choose between the following interfaces to be the default.
+
+- Material 3
+- Fluent Design
+- Carbon Design
+
+This desicion has'nt been made yet, I advise you stay alert and ready to Contribute if so.
+This project is about what the culture feeling, interface Syntax will be drafted soon and
+will be ready for production very soon.
+
+<br/>
+Thank You For The Interest ❣️❣️❣️❣️
 
 
