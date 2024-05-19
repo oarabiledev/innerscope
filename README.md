@@ -62,5 +62,3 @@ class Application {
 
 window.Application = Application;
 ```
-
-If you dont understand hoe to use, check DroidScript Docs, only interface methods are supported.
