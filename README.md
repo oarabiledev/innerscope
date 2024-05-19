@@ -49,15 +49,12 @@ After this, we add our App.mjs file where all ui is called.
 ```javascript
 
 class Application {
-	OnStart(){
+    OnStart(){
+         this.lay = ui.createLayout('Linear','FillXY');
+         this.lay.setBackColor()
 
-		this.lay = ui.createLayout('Linear','FillXY');
-		this.lay.setBackColor()
-
-		ui.addLayout(this.lay)
-
-	}
-	
+         ui.addLayout(this.lay)
+    }
 }
 
 window.Application = Application;
