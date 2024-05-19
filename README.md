@@ -9,7 +9,7 @@
 <h3 align="center";"> Euphoria Is A FrameWork You Will Never Forget, Beware Its Addictive.</h3>
 
 
-When HTML gets nested and XML Tags keep drowning me in and can't find whether i set
+HTML gets nested and XML Tags keep drowning me in and can't find whether i set
 'search' as an id or a class.
 
 
