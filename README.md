@@ -119,23 +119,9 @@ This simple set-up will produce an interface which looks like this:
 
 <br/>
 
-## The Almost Gray Part ＞﹏＜
+## CONTRIBUTING ❣️❣️
 
-Euphoria is far from ready to production use, Euphoria will include an app* bunch of methods
-to call the browser interface, simply no styling.
-
-Also 
-
-Euphoria's ui* methods will choose between the following interfaces to be the default.
-
-- Material 3
-- Fluent Design
-- Carbon Design
-
-This desicion has'nt been made yet, I advise you stay alert and ready to Contribute if so.
-This project is about what the culture feeling, interface Syntax will be drafted soon and
-will be ready for production very soon.
-
+Euphoria is inspired by DroidScript and it will use a similar syntax.
 <br/>
 Thank You For The Interest ❣️❣️❣️❣️
 
