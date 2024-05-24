@@ -22,14 +22,27 @@ function Euphoria(){
      * @summary Adds/Loads A Plugin into your app.
      * @param {string} pluginName 
      */
-    this.loadPlugin = (pluginName) =>{
-        const head = document.querySelectorAll('head');
-
-        const plugin = document.createElement('script');
-        plugin.src = './pluginFolder/' + pluginName + pluginName + '.js';
-
-        head.appendChild(plugin)
-    }
+    this.loadPlugin = async (pluginName) => {
+        var head = document.getElementsByTagName('head')[0];
+    
+        var plugin = document.createElement('script');
+        plugin.src = './.not-like-us/pluginFolder/' + pluginName + '/main.js';
+        plugin.async = false;  // Ensure script is executed in order
+        plugin.defer = true;   // Defer execution till after parsing
+    
+        // Return a promise that resolves when the script is loaded
+        await new Promise((resolve, reject) => {
+            plugin.onload = function () {
+                console.info(`ui.loadPlugin() : ${pluginName}`);
+                resolve();
+            };
+            plugin.onerror = function () {
+                reject(new Error(`Failed to load plugin: ${pluginName}`));
+            };
+            head.appendChild(plugin);
+        });
+    
+    };
 
     /**
      * @summary Add or reference a js file. 
@@ -40,6 +53,11 @@ function Euphoria(){
 
         const script = document.createElement('script');
         script.src = filePath;
+        script.defer = true;
+
+        script.onerror = function (){
+            console.info(`ui.loadScript() : Failed`)
+        }
         document.head.appendChild(script);
 
         if (callback){
@@ -53,15 +71,18 @@ function Euphoria(){
         }
     }
 
-    /**
-     * @summary Add or reference a js file, with defer option.
-     * @param {string} filePath 
-     * @param {string} noDefer 
-     */
-    this.Script = (filePath, noDefer = false)=>{
+    this.loadCSS = function (filepath) {
+        let style = document.createElement('link')
+        style.type = 'text/stylesheet';
+        style.href = filepath;
+        style.fetchPriority = 'high'
 
+        document.head.appendChild(style);
     }
 
+    this.addPageRoutes = (pageRoutes) =>{
+
+    }
     /**
      * @summary Redirect To Another Page
      * @param {string} page Filename In Mod Folder.
@@ -116,8 +137,17 @@ function Euphoria(){
 }
 
 function layoutObject(type = 'Linear', options = 'FillXY'){
+    console.info(`#${idCount()}`)
     console.info(`createLayout() : ${type},${options}`)
     this.element = null;
+
+    this.addChild = function(child) {
+        if (child.element instanceof HTMLElement) {
+            this.element.appendChild(child.element);
+        } else {
+            console.error('Not An HTMLElement');
+        }
+    }
 
     /**
      * @summary Adds an Animation.
@@ -152,15 +182,35 @@ function layoutObject(type = 'Linear', options = 'FillXY'){
         console.info(`setBackColor() : ${color}`)
     }
 
+    /**
+     * Tags the HTML Element With Associated Id or ClassName
+     * @param {any} id Element Id
+     * @param {any} className Element ClassName
+    */
+    this.setTagging = (id, className) =>{
+        if (designId == 'bds'){
+            this.element.id = id;
+            this.element.className = className;
+        }
+        else {
+            console.info(`setTagging Method Not Available.`)
+        }
+    }
+
     this.element = document.createElement('div');
     this.element.style.width = 100 + '%';
     this.element.style.height = 100 + '%';
-
+    styleElement(this.element, type, options);
+        
     return this;
 }
 
+let componentId = 0;
 
-window.ui = new Euphoria();
+function idCount(){
+    componentId = componentId + 1;
+    return componentId;
+}
 
 function _platForm() {
     const userAgent = navigator.userAgent;
@@ -179,11 +229,12 @@ const platform = {
 };
 
 // Finally Import & We Call OnStart
+import Application from "../App.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     try {
         console.info(`Euphoria Is Running In :` + platform.type)
-        const App = new window.Application();
+        const App = new Application();
         App.OnStart();
     } catch (err) {
         return null;
@@ -208,3 +259,67 @@ document.onvisibilitychange = function () {
         }
     }
 };
+
+function styleElement(layout, type, options) {
+    if (type.toLowerCase() == 'linear') {
+        layout.style.display = 'flex';
+    } else if (type.toLowerCase() === 'card') {
+        layout.style.padding = '10px';
+        layout.style.borderRadius = '5px';
+    } else if (type.toLowerCase() === 'frame') {
+        layout.style.position = 'relative';
+    } else if (type.toLowerCase() === 'absolute') {
+        layout.style.position = 'relative';
+    } else {
+        console.error('Improper layout ' + layout);
+    }
+
+    if (options) {
+        if (options.toLowerCase().includes('left')) {
+            layout.style.justifyContent = 'flex-start';
+        }
+        if (options.toLowerCase().includes('right')) {
+            layout.style.justifyContent = 'flex-end';
+        }
+        if (options.toLowerCase().includes('center')) {
+            layout.style.justifyContent = 'center';
+        }
+        if (options.toLowerCase().includes('vcenter')) {
+            layout.style.alignItems = 'center';
+        }
+        if (options.toLowerCase().includes('h/vcenter')) {
+            layout.style.justifyContent = 'center';
+            layout.style.alignItems = 'center';
+        }
+        if (options.toLowerCase().includes('bottom')) {
+            layout.style.alignSelf = 'flex-end';
+        }
+        if (options.toLowerCase().includes('top')) {
+            layout.style.alignSelf = 'flex-start';
+        }
+        if (options.toLowerCase().includes('fillx')) {
+            layout.style.width = '100%';
+        }
+        if (options.toLowerCase().includes('filly')) {
+            layout.style.height = '100%';
+        }
+        if (options.toLowerCase().includes('horizontal')) {
+            layout.style.flexDirection = 'row';
+        }
+        if (options.toLowerCase().includes('vertical')) {
+            layout.style.flexDirection = 'column';
+        }
+    }
+}
+
+class ElementComposer {
+    constructor(parent, width, height, options, objectType){
+
+    }
+}
+
+Euphoria.Composer = new ElementComposer()
+
+const ui = new Euphoria()
+
+export default ui ;
