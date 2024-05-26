@@ -1,23 +1,16 @@
 /**
- * @description
- * Euphoria 
- * : a feeling of well being or elation
- * | Apparently, its the chamge in mood--the
- * | feeling of euphoria and reduced anxiety
- * | that prompts people to start using this 
- * | dangerous drug.
- * | - Rita L. Atikson et al. 
- * |           {{{(>_<)}}} 
- * | Inspired by Kendrick Lamar, my hate 
- * | for HTML & Web FrameWorks.
- * | Further inspired by DroidScript.
+ * @description 
+ * A feeling of well being or elation.
+ * Apparently, its the chamge in mood.
  * 
- * @summary An Interface Framework Inspired By Hatred.
- * @license 
- *  Apache License Version 2.0, January 2004
+ * The feeling of euphoria and reduced anxiety
+ * that prompts people to
+ * 
+ *  start using this dangerous drug.
+ * - Rita L. Atikson et al. 
 */
 
-function Euphoria(){
+window.ui = new function Euphoria(){
     /**
      * @summary Adds/Loads A Plugin into your app.
      * @param {string} pluginName 
@@ -53,12 +46,13 @@ function Euphoria(){
 
         const script = document.createElement('script');
         script.src = filePath;
-        script.defer = true;
+        script.fetchPriority = 'high'
+        script.defer = 'true'
 
         script.onerror = function (){
             console.info(`ui.loadScript() : Failed`)
         }
-        document.head.appendChild(script);
+        document.getElementsByTagName("head")[0].appendChild(script)
 
         if (callback){
             script.onload = function (){
@@ -72,12 +66,11 @@ function Euphoria(){
     }
 
     this.loadCSS = function (filepath) {
-        let style = document.createElement('link')
-        style.type = 'text/stylesheet';
-        style.href = filepath;
-        style.fetchPriority = 'high'
-
-        document.head.appendChild(style);
+        const fileref = document.createElement("link")
+        fileref.rel = "stylesheet"
+        fileref.type = "text/css"
+        fileref.href = filepath
+        document.getElementsByTagName("head")[0].appendChild(fileref)
     }
 
     this.addPageRoutes = (pageRoutes) =>{
@@ -137,6 +130,124 @@ function Euphoria(){
 }
 
 
+window.widthComposer = function widthComposer(width) {
+    let deviceWidth = window.innerWidth;
+    return parseFloat(width * deviceWidth)/ 1 + 'px'; 
+}
+
+window.heightComposer = function heightComposer(height) {
+    let deviceHeight = window.innerHeight;
+    return parseFloat(height * deviceHeight)/ 1 + 'px';
+}
+
+
+window.ElementComposer = class ElementComposer {
+    constructor(parent, width, height, options, objectInfo){
+        this.id = idCount();
+        
+        this.width = width;
+        this.height = height;
+        this.parent = parent;
+        this.objectInfo = objectInfo;
+
+        
+        this.options = options;
+
+        // We Then Render The Div & Components
+        this.composer = document.createElement('div');
+        this.composer.id = this.id;
+        
+        if (!this.width || !this.height){
+            this.composer.style.width = "fit-content";
+            this.composer.style.height = "fit-content";
+        }
+        else {
+            this.composer.style.width = widthComposer(this.width) ;
+            this.composer.style.height = heightComposer(this.height) ; 
+            
+        }
+        
+        this.element = this.composer;
+
+        this.parent.addChild(this)
+    }
+
+    /**
+     * Sets the size of the control, use option parameter to determine type.
+     * @param {number} width 
+     * @param {number} height 
+     * @param {string} options 
+     */
+    setSize(width, height, options){
+        if(!options && typeof(width) === Number){
+            this.composer.style.width = widthComposer(width);
+            this.composer.style.height = heightComposer(height);
+        }
+        else {
+            this.composer.style.width = width + options;
+            this.composer.style.height = height + options;
+        }
+    }
+
+    /**
+     * Transform and Scale Component
+     * @param {number} width 
+     * @param {number} height 
+     */
+    setScale(width, height){
+        if(width || height){
+            this.composer.style.transform = `scale($width, $height)`
+        }
+        else console.info(`For Transform Scale No Values`);
+    }
+    /**
+     * Add a function to be called on a click event.
+     * @param {Function} onClick 
+     */
+    setOnClick(onClick){
+        this.composer.addEventListener('click',()=>{
+            onClick()
+        })
+    }
+
+    /**
+     * @param{any} color The color of component in a string or hex.
+     */
+    set backColor(color){
+        this.color = color;
+        this.composer.style.backgroundColor = color
+    }
+
+    get backColor(){
+        return this.color;
+    }
+
+
+}
+
+let componentId = 0;
+
+function idCount(){
+    componentId = componentId + 1;
+    return componentId;
+}
+
+function _platForm() {
+    const userAgent = navigator.userAgent;
+    if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent)) return "mobile";
+    else if(/iPad/i.test(userAgent)) return "tablet";
+    else return "desktop";
+}
+
+const platform = {
+    mobile: navigator.userAgent.match(/(iPad)|(iPhone)|(iPod)|(android)|(webOS)/i) != null,
+    ios: navigator.userAgent.match(/(iPad)|(iPhone)|(iPod)/i) != null,
+    android: navigator.userAgent.match(/(android)/i) != null,
+    macos: navigator.userAgent.match(/(Macintosh)|(MacIntel)|(MacPPC)|(Mac68K)/i) != null,
+    windows: navigator.userAgent.match(/(Windows NT)|(Win32)|(Win64)|(WOW64)/i) != null,
+    type: _platForm()
+};
+
 
 function layoutObject(type = 'Linear', options = 'FillXY'){
     console.info(`#${idCount()}`)
@@ -169,7 +280,16 @@ function layoutObject(type = 'Linear', options = 'FillXY'){
     this.setOnTouch = (onTouch) =>{
 
     }
-
+    this.setSize = function (width, height, options){
+        if(!options){
+            this.element.style.width = widthComposer(width);
+            this.element.style.height = heightComposer(height);
+        }
+        else {
+            this.element.style.width = width + options;
+            this.element.style.height = height + options;
+        }
+    }
     /**
      * @summary Adds an onClick Event Listener.
      * @param {Function} onTouch
@@ -207,51 +327,35 @@ function layoutObject(type = 'Linear', options = 'FillXY'){
     return this;
 }
 
+/**
+ * @description
+ * Why I switched From DOMContentLoaded To window.onload
+   window.onload fires when all content is done loading,
+   i.e : a page with images and vids are all loaded the
+   function is fired.
 
-const ui = new Euphoria()
-let componentId = 0;
+   But DOMContentLoaded fires when some of them are loaded
+   almost like your friends are here but havent brought 
+   the gifts.
+*/
 
-function idCount(){
-    componentId = componentId + 1;
-    return componentId;
-}
-
-function _platForm() {
-    const userAgent = navigator.userAgent;
-    if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent)) return "mobile";
-    else if(/iPad/i.test(userAgent)) return "tablet";
-    else return "desktop";
-}
-
-const platform = {
-    mobile: navigator.userAgent.match(/(iPad)|(iPhone)|(iPod)|(android)|(webOS)/i) != null,
-    ios: navigator.userAgent.match(/(iPad)|(iPhone)|(iPod)/i) != null,
-    android: navigator.userAgent.match(/(android)/i) != null,
-    macos: navigator.userAgent.match(/(Macintosh)|(MacIntel)|(MacPPC)|(Mac68K)/i) != null,
-    windows: navigator.userAgent.match(/(Windows NT)|(Win32)|(Win64)|(WOW64)/i) != null,
-    type: _platForm()
-};
-
-// Finally Import & We Call OnStart
-import Application from "../App.js";
-
-document.addEventListener('DOMContentLoaded', () => {
+window.onload = () => {
     try {
-        console.info(`Euphoria Is Running In :` + platform.type)
-        const App = new Application();
+        const App = new window.Application();
         App.OnStart();
     } catch (err) {
+        console.error(err);
         return null;
     }
-});
+};
 
-// Add Some Event Listeners To Support Other App Events
 document.onvisibilitychange = function () {
     if (document.visibilityState === 'hidden') {
         try {
             const App = new window.Application();
             App.OnPause();
         } catch (err) {
+            console.error(err);
             return null;
         }
     } else {
@@ -259,6 +363,7 @@ document.onvisibilitychange = function () {
             const App = new window.Application();
             App.OnResume();
         } catch (err) {
+            console.error(err);
             return null;
         }
     }
@@ -316,90 +421,8 @@ function styleElement(layout, type, options) {
     }
 }
 
-function widthComposer(width) {
-    return typeof width === 'number' ? `${width * 100}%` : width;
-}
-
-function heightComposer(height) {
-    return typeof height === 'number' ? `${height * 100}%` : height;
-}
-
-class ElementComposer {
-    constructor(parent, width, height, options, objectInfo){
-        this.id = idCount();
-        
-        this.width = width;
-        this.height = height;
-        this.parent = parent;
-        this.objectInfo = objectInfo;
-
-        
-        this.options = options;
-
-        // We Then Render The Div & Components
-        this.composer = document.createElement('div');
-        this.composer.id = this.id;
-       
-        this.composer.style.width = widthComposer(this.width) ;
-        this.composer.style.height = heightComposer(this.height) ; 
-        
-        this.element = this.composer;
-
-        this.parent.addChild(this)
-    }
-
-    /**
-     * Sets the size of the control, use option parameter to determine type.
-     * @param {number} width 
-     * @param {number} height 
-     * @param {string} options 
-     */
-    setSize(width, height, options){
-        if(!options){
-            this.composer.style.width = widthComposer(width);
-            this.composer.style.height = heightComposer(height);
-        }
-        else {
-            this.composer.style.width = width + options;
-            this.composer.style.height = height + options;
-        }
-    }
-
-    /**
-     * Transform and Scale Component
-     * @param {number} width 
-     * @param {number} height 
-     */
-    setScale(width, height){
-        if(width || height){
-            this.composer.style.transform = `scale($width, $height)`
-        }
-        else console.info(`For Transform Scale No Values`);
-    }
-    /**
-     * Add a function to be called on a click event.
-     * @param {Function} onClick 
-     */
-    setOnClick(onClick){
-        this.composer.addEventListener('click',()=>{
-            onClick()
-        })
-    }
-
-    /**
-     * @param{any} color The color of component in a string or hex.
-     */
-    set backColor(color){
-        this.color = color;
-        this.composer.style.backgroundColor = color
-    }
-
-    get backColor(){
-        return this.color;
-    }
 
 
-}
 
 
 ui.addButton = (parent, text, width, height, icon, options) =>{
@@ -428,6 +451,4 @@ const buttonObject = class extends ElementComposer{
     
 }
 
-
-
-export default ui ;
+// End Of File.
