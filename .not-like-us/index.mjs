@@ -136,6 +136,8 @@ function Euphoria(){
     }
 }
 
+
+
 function layoutObject(type = 'Linear', options = 'FillXY'){
     console.info(`#${idCount()}`)
     console.info(`createLayout() : ${type},${options}`)
@@ -205,6 +207,8 @@ function layoutObject(type = 'Linear', options = 'FillXY'){
     return this;
 }
 
+
+const ui = new Euphoria()
 let componentId = 0;
 
 function idCount(){
@@ -312,14 +316,118 @@ function styleElement(layout, type, options) {
     }
 }
 
-class ElementComposer {
-    constructor(parent, width, height, options, objectType){
-
-    }
+function widthComposer(width) {
+    return typeof width === 'number' ? `${width * 100}%` : width;
 }
 
-Euphoria.Composer = new ElementComposer()
+function heightComposer(height) {
+    return typeof height === 'number' ? `${height * 100}%` : height;
+}
 
-const ui = new Euphoria()
+class ElementComposer {
+    constructor(parent, width, height, options, objectInfo){
+        this.id = idCount();
+        
+        this.width = width;
+        this.height = height;
+        this.parent = parent;
+        this.objectInfo = objectInfo;
+
+        
+        this.options = options;
+
+        // We Then Render The Div & Components
+        this.composer = document.createElement('div');
+        this.composer.id = this.id;
+       
+        this.composer.style.width = widthComposer(this.width) ;
+        this.composer.style.height = heightComposer(this.height) ; 
+        
+        this.element = this.composer;
+
+        this.parent.addChild(this)
+    }
+
+    /**
+     * Sets the size of the control, use option parameter to determine type.
+     * @param {number} width 
+     * @param {number} height 
+     * @param {string} options 
+     */
+    setSize(width, height, options){
+        if(!options){
+            this.composer.style.width = widthComposer(width);
+            this.composer.style.height = heightComposer(height);
+        }
+        else {
+            this.composer.style.width = width + options;
+            this.composer.style.height = height + options;
+        }
+    }
+
+    /**
+     * Transform and Scale Component
+     * @param {number} width 
+     * @param {number} height 
+     */
+    setScale(width, height){
+        if(width || height){
+            this.composer.style.transform = `scale($width, $height)`
+        }
+        else console.info(`For Transform Scale No Values`);
+    }
+    /**
+     * Add a function to be called on a click event.
+     * @param {Function} onClick 
+     */
+    setOnClick(onClick){
+        this.composer.addEventListener('click',()=>{
+            onClick()
+        })
+    }
+
+    /**
+     * @param{any} color The color of component in a string or hex.
+     */
+    set backColor(color){
+        this.color = color;
+        this.composer.style.backgroundColor = color
+    }
+
+    get backColor(){
+        return this.color;
+    }
+
+
+}
+
+
+ui.addButton = (parent, text, width, height, icon, options) =>{
+    return new buttonObject(parent, text, width, height, icon, options)
+}
+
+const buttonObject = class extends ElementComposer{
+    constructor(parent, text, width, height, icon, options){
+        super(parent,width, height, options, "Button")
+        this.text = text;
+        this.icon = icon;
+        
+        this._create()
+    }
+
+    _create(){
+        this.element = document.createElement('button');
+        
+        this.element.style.width = widthComposer(this.width);
+        this.element.style.height = heightComposer(this.height);
+
+        this.element.textContent = this.text;
+        this.composer.appendChild(this.element)
+    }
+
+    
+}
+
+
 
 export default ui ;
