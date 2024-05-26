@@ -151,7 +151,7 @@ window.ElementComposer = class ElementComposer {
         this.objectInfo = objectInfo;
 
         
-        this.options = options;
+        this.options = options.toLowerCase();
 
         // We Then Render The Div & Components
         this.composer = document.createElement('div');
@@ -435,20 +435,74 @@ const buttonObject = class extends ElementComposer{
         this.text = text;
         this.icon = icon;
         
+        this.isDisabled = false;
         this._create()
     }
 
     _create(){
-        this.element = document.createElement('button');
+        this.element = document.createElement('mdui-button');
         
         this.element.style.width = widthComposer(this.width);
+            
         this.element.style.height = heightComposer(this.height);
+    
+        if (this.options.split(',').length == 1){
+            this.element.variant = this.options
+            this.element.textContent = this.text;
+        }
 
-        this.element.textContent = this.text;
+        else {
+            if (this.options.includes('link')){
+                
+                this.element.variant = this.options.split(',')[0]
+            }
+            if (this.options.includes('loading')){
+                this.element.loading = true;
+                this.element.textContent = this.text;
+                this.element.variant = this.options.split(',')[0]
+            }
+        }
+
+        if (this.icon) {
+            this._addIcon(this.icon);
+        } else return null;
+
         this.composer.appendChild(this.element)
     }
-
     
+    _addIcon(icon) {
+        const iconElement = document.createElement('mdui-icon');
+        iconElement.slot = "icon";
+        iconElement.name = icon;
+        this.element.insertBefore(iconElement, this.element.firstChild);
+    }
+
+    /**
+     * Set the buttons icon.
+     * @param {any} icon Can be String, Hex, RGBA.
+     */
+    setIcon(icon) {
+        const existingIcon = this.element.querySelector('mdui-icon');
+        if (existingIcon) {
+            existingIcon.name = icon;
+        } else {
+            this._addIcon(icon);
+        }
+    }
+
+    /**
+     * @param {boolean} disable
+     */
+    set disable(disable = false){
+        if (disable) {
+            this.element.disabled = true ;
+            this.isDisabled = true
+        }
+    }
+
+    get disable (){
+        return this.isDisabled;
+    }
 }
 
 // End Of File.
