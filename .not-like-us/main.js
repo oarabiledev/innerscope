@@ -421,7 +421,22 @@ function styleElement(layout, type, options) {
     }
 }
 
-
+/**
+ * Sets your apps theme
+ * @param {string} theme 
+ */
+ui.setTheme = (theme) =>{
+    let AppContainer = document.getElementById('AppContainer')
+    if (theme == 'dark'){
+        AppContainer.className = 'mdui-theme-dark';
+    }
+    if (theme == 'light'){
+        AppContainer.className = 'mdui-theme-light'
+    }
+    if (theme == 'auto'){
+        AppContainer.className = 'mdui-theme-auto';
+    }
+}
 
 
 
@@ -440,6 +455,10 @@ const buttonObject = class extends ElementComposer{
     }
 
     _create(){
+        console.info(`#${idCount()}`)
+        
+        console.info(`addButton() : \n${this.width}, ${this.height}, ${this.options}`)
+
         this.element = document.createElement('mdui-button');
         
         this.element.style.width = widthComposer(this.width);
@@ -453,7 +472,7 @@ const buttonObject = class extends ElementComposer{
 
         else {
             if (this.options.includes('link')){
-                
+
                 this.element.variant = this.options.split(',')[0]
             }
             if (this.options.includes('loading')){
