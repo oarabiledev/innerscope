@@ -72,7 +72,7 @@ Then create the typical index.html file.
 <head>
     <title>Euphoria PreView</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src=".not-like-us/index.js"></script>
+    <script src=".not-like-us/main.js"></script>
     <style>
         body, html {
             width: 100%;
@@ -86,7 +86,7 @@ Then create the typical index.html file.
             height: 100vh; /* 100% of the viewport height */
         }
     </style>
-
+    
 </head>
 
 <body id="AppContainer">
@@ -94,22 +94,33 @@ Then create the typical index.html file.
 </body>
 
 </html>
+
 ```
 
 After this, we add our App.js file where all ui is called.
 <br/>
 ```javascript
 
-class Application {
-    OnStart(){
-         this.lay = ui.createLayout('Linear','FillXY');
-         this.lay.setBackColor()
+ui.loadCSS('.not-like-us/.src/compFolder/commandBar.css')
+ui.loadScript('.not-like-us/.src/compFolder/commandBar.js')
 
-         ui.addLayout(this.lay)
-    }
+class Application {
+	OnStart(){
+
+		let lay, btn;
+	
+		lay = ui.createLayout('Linear','FillXY, VCenter');
+	
+		btn = ui.addCommandBar(lay, 'command line & installer', 0.9, 0.05, "")
+		
+		ui.addLayout(lay)
+	}
+
 }
 
 window.Application = Application;
+
+
 ```
 <br/>
 This simple set-up will produce an interface which looks like this:
