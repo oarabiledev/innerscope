@@ -1,0 +1,265 @@
+/* From https://github.com/Mildredrf/Bida23040 */
+/* CSS styles */
+body {
+    font-family:  'Cinzel', serif;
+    margin: 0;
+    padding: 0;
+}
+
+/*****************************************************
+
+ ---------------NAV BAR STYLING----------
+
+
+*****************************************************/
+
+.navbar {
+    background-color: #566573;
+    color: #fff;
+    padding-top: 10px;
+    text-align: center;
+    height: 110px;
+    padding-bottom: 40px;
+}
+.navbar img {
+    display: inline-block;
+    vertical-align: middle;
+    height: 55px; /* Adjust the height as needed */
+}
+.navbar a {
+    margin: 10px 40px 10px 10px;
+    color: #fff;
+    font-size: 20px;
+    text-decoration: none;
+}
+.navbar a:hover {
+    color: #000;
+
+}
+.navbar input[type="text"] {
+    width: 200px;
+    padding: 5px;
+}
+
+/* SEARCH BOX STYLING*/
+#search-input {
+    margin-top: 15px;
+    margin-bottom: 10px;
+    width: 300px;
+    padding: 5px;
+}
+
+/*mobile styles*/
+@media (max-width: 768px) {
+    .navbar {
+      display: list-item;
+    }
+  }
+
+
+/*****************************************************
+
+ ---------------BANNER STYLING----------
+
+
+*****************************************************/
+.banner  {
+    display: none;
+    height: 700px;
+    width: 100%;
+    position: relative;
+}
+/*This adds a dark overlay to the banner img so that the text on top of it is clear*/
+.banner::before {
+    content: ""; /* This is necessary for the pseudo element (.banner::before) to work. */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Adjust the opacity as needed */
+    opacity: 0; /* Set initial opacity to 0 */
+    transition: opacity 0.3s ease; /* Add transition effect when mouse hovers */
+}
+.banner:hover::before {
+    opacity: 1; /* Change opacity on hover */
+}
+
+/*THIS IS HOW THE TEXT APPEARS ON TOP OF THE BANNER*/
+.banner-text {
+    display: none; /* Hide the text and button initially */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Move text to the center against y and x axis*/
+    font-family: "Georgia", sans-serif;
+    color: #fff;
+    font-size: 24px;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.banner:hover .banner-text {
+    display: block; /* Show the text and button on hover */
+}
+
+/* PREVENTS IMAGES IN BANNER FROM DISPLAYING POORLY*/
+.banner img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.active {
+    display: block;
+}
+
+/*****************************************************
+
+ ---------------ACCORDION STYLING----------
+
+ ****************************************************/
+.accordion {
+    background-color: #566573;
+    color: #fff;
+    font-family:  'Cinzel', serif;
+    cursor: pointer;
+    padding: 10px;
+    width: 100%;
+    text-align: center;
+    border: none;
+    outline: none;
+    font-size: 4.3em;
+}
+.active-accordion {
+    background-color: #273746;
+}
+.accordion-content {
+    padding: 10px;
+    overflow: hidden;
+    background: lightgray;
+    font-family: "Georgia", sans-serif;
+    font-size: 1.2em;
+    text-align: center;
+    color: black;
+}
+
+
+/*****************************************************
+
+ ---------------Button STYLING----------
+
+ ****************************************************/
+
+.rounded-button {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: none;
+    width: 200px;
+    font-family: "Georgia", sans-serif;
+    font-size: 1em;
+    background-color: #566573;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.3s ease; /* Add transition effect when mouse hovers */
+
+}
+.rounded-button:hover {
+    background-color: #273746;
+    color: #000;
+    transform: scale(1.1); /* makes button have enlarge effect when mouse hovers */
+}
+
+/*****************************************************
+
+ ---------------Movie POSTERS STYLING----------
+
+ ****************************************************/
+
+.moviePoster-container{
+    display: inline-block;
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+.moviePoster-container p{ /*This is the style for paragraphs in moviePoster-container*/
+    font-family: "Georgia", sans-serif;
+    font-size: 15px;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 20px;
+}
+.moviePoster-container img{ /*This is the style for images in moviePoster-container*/
+    height: 430px;
+    width: 303px;
+    border-radius: 10px;
+    margin-right: 20px;
+    transition: transform 0.3s ease; /* Add transition effect when mouse hovers */
+}
+.moviePoster-container img:hover {
+    transform: scale(1.1); /* makes picture have enlarge effect when mouse hovers */
+}
+
+/*****************************************************
+
+ ---------------FOOTER STYLING----------
+
+ ****************************************************/
+
+.footer{
+    background-color: #566573;
+    color: #fff;
+    padding-top: 10px;
+    text-align: center;
+    height: 280px;
+    padding-bottom: 40px;
+}
+.footer img{
+    height: 120px;
+    width: 200px;
+}
+
+.footer-icon-container i{ /*Adds space between icons*/
+    margin-right: 15px;
+}
+/* Change the color on hover */
+.fab:hover {
+    color: #000000; /* Black */
+}
+
+/*****************************************************
+
+ ---------------Game POSTERS STYLING----------
+
+ ****************************************************/
+
+ .gamePoster-container{
+    display: inline-block;
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+.gamePoster-container p{ /*This is the style for paragraphs in moviePoster-container*/
+    font-family: "Georgia", sans-serif;
+    font-size: 15px;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 20px;
+}
+.gamePoster-container img{ /*This is the style for images in moviePoster-container*/
+    height: 430px;
+    width: 303px;
+    border-radius: 10px;
+    margin-right: 20px;
+    transition: transform 0.3s ease; /* Add transition effect when mouse hovers */
+}
+.gamePoster-container img:hover {
+    transform: scale(1.1); /* makes picture have enlarge effect when mouse hovers */
+}
+.adre{
+	text-align: center;
+	padding-left: 250px;
+	padding-right: 250px;
+    margin-top: 13px;
+	
+}
