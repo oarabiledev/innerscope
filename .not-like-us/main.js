@@ -12,6 +12,15 @@
 
 window.ui = new function Euphoria(){
     /**
+     * Set the title for your app.
+     * @param {String} title 
+     */
+    this.setTitle = (title) =>{
+        if (typeof title == 'string'){
+            document.title = title;
+        }
+    }
+    /**
      * @summary Adds/Loads A Plugin into your app.
      * @param {string} pluginName 
      */
@@ -140,6 +149,14 @@ window.heightComposer = function heightComposer(height) {
     return parseFloat(height * deviceHeight)/ 1 + 'px';
 }
 
+window.pxToDeviceRatio = function pxToDeviceRatio(val, side){
+    if (side.toLowerCase() == 'w'){
+        return val / window.innerWidth;
+    }
+    else {
+        return val / window.innerHeight;
+    }
+}
 
 window.ElementComposer = class ElementComposer {
     constructor(parent, width, height, options, objectInfo){
@@ -156,17 +173,15 @@ window.ElementComposer = class ElementComposer {
         // We Then Render The Div & Components
         this.composer = document.createElement('div');
         this.composer.id = this.id;
-        
-        if (!this.width || !this.height){
-            this.composer.style.width = "fit-content";
-            this.composer.style.height = "fit-content";
+
+        if (! typeof this.width == 'number'){
+            this.composer.style.width = this.width ? widthComposer(this.width) : "fit-content";
+            this.composer.style.height = this.height ? heightComposer(this.height) : "fit-content"; 
         }
         else {
-            this.composer.style.width = widthComposer(this.width) ;
-            this.composer.style.height = heightComposer(this.height) ; 
-            
+            this.composer.width = this.width;
+            this.composer.height = this.height;
         }
-        
         this.element = this.composer;
 
         this.parent.addChild(this)
@@ -210,6 +225,15 @@ window.ElementComposer = class ElementComposer {
         })
     }
 
+    setPosition (left, top, width, height){
+        this.composer.style.position = 'absolute'
+        
+        this.composer.style.left = widthComposer(left - 1/2 * (width))
+        this.composer.style.top =  heightComposer(top)
+        
+        console.log(widthComposer(left))
+        console.log(heightComposer(top))
+    }
     /**
      * @param{any} color The color of component in a string or hex.
      */
@@ -304,24 +328,9 @@ function layoutObject(type = 'Linear', options = 'FillXY'){
         console.info(`setBackColor() : ${color}`)
     }
 
-    /**
-     * Tags the HTML Element With Associated Id or ClassName
-     * @param {any} id Element Id
-     * @param {any} className Element ClassName
-    */
-    this.setTagging = (id, className) =>{
-        if (designId == 'bds'){
-            this.element.id = id;
-            this.element.className = className;
-        }
-        else {
-            console.info(`setTagging Method Not Available.`)
-        }
-    }
-
     this.element = document.createElement('div');
-    this.element.style.width = 100 + '%';
-    this.element.style.height = 100 + '%';
+    this.element.style.width = widthComposer(1)
+    this.element.style.height = heightComposer(1)
     styleElement(this.element, type, options);
         
     return this;
@@ -378,7 +387,7 @@ function styleElement(layout, type, options) {
     } else if (type.toLowerCase() === 'frame') {
         layout.style.position = 'relative';
     } else if (type.toLowerCase() === 'absolute') {
-        layout.style.position = 'relative';
+        layout.style.position = 'absolute';
     } else {
         console.error('Improper layout ' + layout);
     }
@@ -407,10 +416,10 @@ function styleElement(layout, type, options) {
             layout.style.alignSelf = 'flex-start';
         }
         if (options.toLowerCase().includes('fillx')) {
-            layout.style.width = '100%';
+            layout.style.width = widthComposer(1);
         }
         if (options.toLowerCase().includes('filly')) {
-            layout.style.height = '100%';
+            layout.style.height = widthComposer(1);
         }
         if (options.toLowerCase().includes('horizontal')) {
             layout.style.flexDirection = 'row';
@@ -420,6 +429,7 @@ function styleElement(layout, type, options) {
         }
     }
 }
+
 
 /**
  * Sets your apps theme
@@ -438,7 +448,20 @@ ui.setTheme = (theme) =>{
     }
 }
 
+/**
+ * Adds a dialog to your page.
+ * @param {String} title 
+ * @param {String} description 
+ * @param {Object} dialogActions 
+ * @returns 
+ */
+ui.showDialog = (title, description, actions) =>{
+    return new dialogObject(title, description, actions)
+}
 
+const dialogObject = function (title, description, dialogActions){
+    // Dialog Function
+}
 
 ui.addButton = (parent, text, width, height, icon, options) =>{
     return new buttonObject(parent, text, width, height, icon, options)
@@ -523,5 +546,41 @@ const buttonObject = class extends ElementComposer{
         return this.isDisabled;
     }
 }
+
+
+ui.addImage = (parent, filePath, width, height, options)=>{
+    return new imageObject(parent, filePath, width, height, options);
+}
+
+const imageObject = class extends ElementComposer{
+    constructor(parent, filePath, width, height, options){
+        super(parent, width, height, options)
+
+        this.filePath = filePath
+        this._create()
+    }
+
+    _create(){
+        console.info(`#${idCount()}`);
+        console.info(`addImage() \n ${this.width}, ${this.height}`);
+
+        this.element = document.createElement('img');
+
+        if (!typeof this.width == 'string'){
+            this.element.style.width = this.width ? widthComposer(this.width) : 'fit-content';
+            this.element.style.height = heightComposer(this.height);
+        }
+        else {
+            this.element.style.width = this.width;
+            this.element.style.height = this.height;
+        }
+        
+        if (typeof this.filePath === 'string') this.element.src = this.filePath;
+        else console.info(`The Image Path Is Not A String`)
+
+        this.composer.appendChild(this.element)
+    }
+}
+
 
 // End Of File.
