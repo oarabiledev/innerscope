@@ -1,5 +1,5 @@
 
-ui.loadCSS('.not-like-us/.src/resourcesFldr/main.css')
+ui.loadCSS('.src/resourcesFldr/main.css')
 
 class Application {
 	OnStart(){
