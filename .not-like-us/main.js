@@ -56,13 +56,11 @@ window.ui = new function Euphoria(){
 
         const script = document.createElement('script');
         script.src = filePath;
-        script.fetchPriority = 'high'
-        script.defer = 'true'
 
         script.onerror = function (){
             console.info(`ui.loadScript() : Failed`)
         }
-        document.getElementsByTagName("head")[0].appendChild(script)
+        
 
         if (callback){
             script.onload = function (){
@@ -73,6 +71,7 @@ window.ui = new function Euphoria(){
         else {
             console.info(`ui.loadScript() : ${filePath}`)
         }
+        document.getElementsByTagName("head")[0].appendChild(script)
     }
 
     this.loadCSS = function (filepath) {
@@ -160,6 +159,32 @@ window.pxToDeviceRatio = function pxToDeviceRatio(val, side){
     }
 }
 
+window.createSignal = function (defaultValue) {
+    let __InnerValue = defaultValue;
+    let subscribers = [];
+    
+    function notify() {
+        for (let subscriber of subscribers) {
+            subscriber(__InnerValue);
+        }
+    }
+        
+    return {
+        get value() {
+            return __InnerValue;
+        },
+        set value(newVariable) {
+            __InnerValue = newVariable;
+            notify();
+        },
+        
+        subscribe: (subscriber) => {
+            subscribers.push(subscriber);
+        }
+    }
+}
+
+
 window.ElementComposer = class ElementComposer {
     constructor(parent, width, height, options, objectInfo){
         this.id = idCount();
@@ -202,16 +227,43 @@ window.ElementComposer = class ElementComposer {
     }
 
     setAnimation(animation, time, callback){
-        if (animation && typeof animation === 'string'){
-            this.element.className = `animate__animated animate__${animation}`
-        } else console.info('Animation not set or in invalid format.');
-
-        if (time && typeof time == 'number'){
-            this.element.className = `--animate-duration: ${time}s`
+        if (animation && time && callback){
+            this.element.className = `animate__animated animate__${animation} 
+            --animate-duration: ${time}s`
+            this.element.addEventListener('animationend',callback())
         }
 
-        if (callback){
+        else if (animation && time){
+            this.element.className = `animate__animated animate__${animation} 
+            --animate-duration: ${time}s`
+        }
+
+        else if (animation && callback){
+            this.element.className = `animate__animated animate__${animation}`
             this.element.addEventListener('animationend',callback())
+        }
+
+        else {
+            this.element.className = `animate__animated animate__${animation}`
+        }
+    }
+
+    /**
+     * Adds a device specific touch handler.
+     * For Mobile onmouseup is used but for
+     * desktop onmousedown is used.
+     * @param {Function} onTouch 
+     */
+    setOnTouch(onTouch){
+        if (platform.type == 'mobile'){
+            this.composer.addEventListener('mouseup',(event) =>{
+                onTouch(event)
+            })
+        }
+        else {
+            this.composer.addEventListener('mousedown', (event) =>{
+                onTouch(event)
+            })
         }
     }
 
@@ -220,11 +272,52 @@ window.ElementComposer = class ElementComposer {
      * @param {Function} onClick 
      */
     setOnClick(onClick){
-        this.composer.addEventListener('click',()=>{
-            onClick()
+        this.composer.addEventListener('click',(event)=>{
+            onClick(event)
         })
     }
 
+    setOnDblClick(onDblClick){
+        this.composer.addEventListener('dblclick',(event)=>{
+            onDblClick(event)
+        })
+    }
+    /**
+     * Adds OnMouseUp event listener
+     * @param {Function} onMouseUp 
+     */
+    setOnMouseUp(onMouseUp){
+        this.composer.addEventListener('mouseup',(event)=>{
+            onMouseUp(event)
+        })
+    }
+
+    /**
+     * Adds mousedown event-listener
+     * @param {Function} onMouseDown 
+     */
+    setOnMouseDown(onMouseDown){
+        this.composer.addEventListener('mousedown',(event)=>{
+            onMouseDown(event)
+        })
+    }
+    /**
+     * Adds mouseover listener
+     * @param {Function} onMouseOver 
+     */
+    setOnMouseOver(onMouseOver){
+        this.composer.addEventListener('mouseover',(event)=>{
+            onMouseOver(event)
+        })
+    }
+    /**
+     * Sets the elements position if it lays in an
+     * Absolute layout
+     * @param {number} left 
+     * @param {number} top 
+     * @param {number} width 
+     * @param {number} height 
+     */
     setPosition (left, top, width, height){
         this.composer.style.position = 'absolute'
         
@@ -238,19 +331,6 @@ window.ElementComposer = class ElementComposer {
             this.composer.style.top = heightComposer(top);
         }
     }
-    /**
-     * @param{any} color The color of component in a string or hex.
-     */
-    set backColor(color){
-        this.color = color;
-        this.element.style.backgroundColor = color
-    }
-
-    get backColor(){
-        return this.color;
-    }
-
-
 }
 
 let componentId = 0;
@@ -339,30 +419,6 @@ function layoutObject(type = 'Linear', options = 'FillXY'){
         
     return this;
 }
-
-/**
- * @description
- * Why I switched From DOMContentLoaded To window.onload
-   window.onload fires when all content is done loading,
-   i.e : a page with images and vids are all loaded the
-   function is fired.
-
-   But DOMContentLoaded fires when some of them are loaded
-   almost like your friends are here but havent brought 
-   the gifts.
-*/
-
-window.onload = () => {
-    try {
-        const App = new window.Application();
-        App.OnStart();
-    } catch (err) {
-        console.error(err);
-        return null;
-    }
-};
-
-window.addEventListener('touchmove', null,{ passive: true }); 
 
 document.onvisibilitychange = function () {
     if (document.visibilityState === 'hidden') {
@@ -604,4 +660,32 @@ const textObject = class extends ElementComposer{
         this.composer.appendChild(this.element)
     }
 }
-// End Of File.
+
+ui.addNavigationBar = (parent, list, icons, labels, options) =>{
+    return navigationBarObject(parent, list, icons, labels, options)
+}
+
+const navigationBarObject = class extends ElementComposer{
+    constructor(parent, list, icons, labels, options){
+        super(parent, width, height, options)
+
+        this.noOfTabs = this.list.split(',').length;
+        this.list = list;
+        this.icons = icons;
+        this.labels = labels;
+
+        if (this.noOfTabs == this.icons.split(',').length){
+            this._create()
+        }
+        else {
+            console.info('Icon count and List count Uneqaul.')
+        }
+    }
+
+    _create(){
+        this.element = document.createElement('mdui-navigation-bar');
+        // TODO
+    }
+}
+
+// ===================================== End Of File. ==============================================
