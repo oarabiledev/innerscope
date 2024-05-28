@@ -70,8 +70,21 @@ Then create the typical index.html file.
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Euphoria PreView</title>
+    
+    <!-- add favicon to all pages-->
+    <link rel="icon" href=".src/resourcesFldr/logo.png" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="https://unpkg.com/mdui@2/mdui.css">
+    <script src="https://unpkg.com/mdui@2/mdui.global.js"></script>
+
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/20.0.0/tween.umd.js"></script>
+
+
     <script src=".not-like-us/main.js"></script>
     <style>
         body, html {
@@ -79,6 +92,8 @@ Then create the typical index.html file.
             height: 100%;
             margin: 0;
             padding: 0;
+            overflow-y: hidden;
+            overflow-y: hidden;
              /* Prevent horizontal scrolling */
         }
         #AppContainer {
@@ -86,10 +101,14 @@ Then create the typical index.html file.
             height: 100vh; /* 100% of the viewport height */
         }
     </style>
-    
 </head>
 
-<body id="AppContainer">
+<body 
+    id="AppContainer" 
+    onload="App = new window.Application();
+    console.log(`Euphoria running on : ${platform.type}`);
+    App.OnStart();">
+
     <script src="App.js"></script>
 </body>
 
