@@ -10,6 +10,7 @@
  * - Rita L. Atikson et al. 
 */
 
+
 window.ui = new function Euphoria(){
     /**
      * Set the title for your app.
@@ -139,6 +140,7 @@ window.ui = new function Euphoria(){
 }
 
 
+
 window.widthComposer = function widthComposer(width) {
     let deviceWidth = window.innerWidth;
     return parseFloat(width * deviceWidth)/ 1 + 'px'; 
@@ -173,11 +175,23 @@ window.ElementComposer = class ElementComposer {
         // We Then Render The Div & Components
         this.composer = document.createElement('div');
         this.composer.id = this.id;
+        
 
-        if (! typeof this.width == 'number'){
-            this.composer.style.width = this.width ? widthComposer(this.width) : "fit-content";
-            this.composer.style.height = this.height ? heightComposer(this.height) : "fit-content"; 
+        if (typeof this.width == 'number'){
+            if (this.width == -1){
+                this.composer.style.width = 'fit-content';
+                this.composer.style.height = heightComposer(this.height); 
+            }
+            else if (this.height == -1){
+                this.composer.style.width = widthComposer(this.width);
+                this.composer.style.height = 'fit-content'
+            }
+            else {
+                this.composer.style.width = widthComposer(this.width);
+                this.composer.style.height = heightComposer(this.height); 
+            }
         }
+
         else {
             this.composer.width = this.width;
             this.composer.height = this.height;
@@ -187,34 +201,20 @@ window.ElementComposer = class ElementComposer {
         this.parent.addChild(this)
     }
 
-    /**
-     * Sets the size of the control, use option parameter to determine type.
-     * @param {number} width 
-     * @param {number} height 
-     * @param {string} options 
-     */
-    setSize(width, height, options){
-        if(!options && typeof(width) === Number){
-            this.composer.style.width = widthComposer(width);
-            this.composer.style.height = heightComposer(height);
+    setAnimation(animation, time, callback){
+        if (animation && typeof animation === 'string'){
+            this.element.className = `animate__animated animate__${animation}`
+        } else console.info('Animation not set or in invalid format.');
+
+        if (time && typeof time == 'number'){
+            this.element.className = `--animate-duration: ${time}s`
         }
-        else {
-            this.composer.style.width = width + options;
-            this.composer.style.height = height + options;
+
+        if (callback){
+            this.element.addEventListener('animationend',callback())
         }
     }
 
-    /**
-     * Transform and Scale Component
-     * @param {number} width 
-     * @param {number} height 
-     */
-    setScale(width, height){
-        if(width || height){
-            this.composer.style.transform = `scale($width, $height)`
-        }
-        else console.info(`For Transform Scale No Values`);
-    }
     /**
      * Add a function to be called on a click event.
      * @param {Function} onClick 
@@ -228,18 +228,22 @@ window.ElementComposer = class ElementComposer {
     setPosition (left, top, width, height){
         this.composer.style.position = 'absolute'
         
-        this.composer.style.left = widthComposer(left - 1/2 * (width))
-        this.composer.style.top =  heightComposer(top)
-        
-        console.log(widthComposer(left))
-        console.log(heightComposer(top))
+        if (width){
+            this.composer.style.left = widthComposer(left - 1/2 * (width))
+            this.composer.style.top =  heightComposer(top)
+
+        }
+        else {
+            this.composer.style.left = widthComposer(left);
+            this.composer.style.top = heightComposer(top);
+        }
     }
     /**
      * @param{any} color The color of component in a string or hex.
      */
     set backColor(color){
         this.color = color;
-        this.composer.style.backgroundColor = color
+        this.element.style.backgroundColor = color
     }
 
     get backColor(){
@@ -358,23 +362,20 @@ window.onload = () => {
     }
 };
 
+window.addEventListener('touchmove', null,{ passive: true }); 
+
 document.onvisibilitychange = function () {
     if (document.visibilityState === 'hidden') {
         try {
             const App = new window.Application();
             App.OnPause();
-        } catch (err) {
-            console.error(err);
-            return null;
-        }
-    } else {
+        } catch (err) {}
+    }
+    else {
         try {
             const App = new window.Application();
             App.OnResume();
-        } catch (err) {
-            console.error(err);
-            return null;
-        }
+        } catch (err) {}
     }
 };
 
@@ -507,7 +508,7 @@ const buttonObject = class extends ElementComposer{
 
         if (this.icon) {
             this._addIcon(this.icon);
-        } else return null;
+        }
 
         this.composer.appendChild(this.element)
     }
@@ -582,5 +583,25 @@ const imageObject = class extends ElementComposer{
     }
 }
 
+ui.addText = (parent, text, width, height, options) =>{
+    return new textObject(parent, text, width, height, options)
+}
 
+const textObject = class extends ElementComposer{
+    constructor(parent, text, width, height, options){
+        super(parent, width, height, options)
+
+        this.text = text;
+        this._create()
+    }
+    _create(){
+        this.element = document.createElement(this.options.split(',')[0]);
+        this.element.textContent = this.text;
+
+        this.element.style.width = widthComposer(this.width);
+        this.element.style.height = heightComposer(this.height);
+
+        this.composer.appendChild(this.element)
+    }
+}
 // End Of File.
