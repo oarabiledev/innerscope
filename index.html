@@ -15,7 +15,7 @@
     />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/20.0.0/tween.umd.js"></script>
 
-    
+
     <script src=".not-like-us/main.js"></script>
     <style>
         body, html {
@@ -34,7 +34,12 @@
     </style>
 </head>
 
-<body id="AppContainer">
+<body 
+    id="AppContainer" 
+    onload="App = new window.Application();
+    console.log(`Euphoria running on : ${platform.type}`);
+    App.OnStart();">
+
     <script src="App.js"></script>
 </body>
 
