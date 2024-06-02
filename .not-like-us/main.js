@@ -10,10 +10,11 @@
  * - Rita L. Atikson et al. 
 */
 
+'use strict'
 
-window.ui = new function Euphoria(){
+const ui = new function Euphoria(){
     /**
-     * Set the title for your app.
+     * Set the title for your ui.
      * @param {String} title 
      */
     this.setTitle = (title) =>{
@@ -22,7 +23,7 @@ window.ui = new function Euphoria(){
         }
     }
     /**
-     * @summary Adds/Loads A Plugin into your app.
+     * @summary Adds/Loads A Plugin into your ui.
      * @param {string} pluginName 
      */
     this.loadPlugin = async (pluginName) => {
@@ -82,6 +83,10 @@ window.ui = new function Euphoria(){
         document.getElementsByTagName("head")[0].appendChild(fileref)
     }
 
+    this.loadImageResource = function(fileName){
+        
+    }
+
     this.addPageRoutes = (pageRoutes) =>{
 
     }
@@ -126,8 +131,8 @@ window.ui = new function Euphoria(){
      */
     this.addLayout = (layout) =>{
         if (layout.element instanceof HTMLElement){
-            let AppContainer = document.getElementById('AppContainer');
-            AppContainer.appendChild(layout.element);
+            
+            document.body.appendChild(layout.element);
 
             console.info(`addLayout() : ${layout.element}`)
         }
@@ -140,17 +145,17 @@ window.ui = new function Euphoria(){
 
 
 
-window.widthComposer = function widthComposer(width) {
+const widthComposer = function widthComposer(width) {
     let deviceWidth = window.innerWidth;
     return parseFloat(width * deviceWidth)/ 1 + 'px'; 
 }
 
-window.heightComposer = function heightComposer(height) {
+const heightComposer = function heightComposer(height) {
     let deviceHeight = window.innerHeight;
     return parseFloat(height * deviceHeight)/ 1 + 'px';
 }
 
-window.pxToDeviceRatio = function pxToDeviceRatio(val, side){
+const pxToDeviceRatio = function pxToDeviceRatio(val, side){
     if (side.toLowerCase() == 'w'){
         return val / window.innerWidth;
     }
@@ -159,33 +164,47 @@ window.pxToDeviceRatio = function pxToDeviceRatio(val, side){
     }
 }
 
-window.createSignal = function (defaultValue) {
-    let __InnerValue = defaultValue;
-    let subscribers = [];
-    
-    function notify() {
-        for (let subscriber of subscribers) {
-            subscriber(__InnerValue);
+const createSignal = function(defaultVal = null){
+    let internalVal = defaultVal;
+    let subscription = [];
+
+    function notifier (){
+        for (subscriber of subscription){
+            subscriber(internalVal)
         }
     }
-        
     return {
-        get value() {
-            return __InnerValue;
-        },
-        set value(newVariable) {
-            __InnerValue = newVariable;
-            notify();
-        },
         
-        subscribe: (subscriber) => {
-            subscribers.push(subscriber);
+        set value(value){
+            internalVal = value;
+            notifier();
+        },
+
+        get value(){
+            return internalVal;
+        },
+
+        /**
+         * Subscribe to any changes to your value
+         * The new value will be passed into your
+         * Function.
+         * @param {Function} fn 
+         */
+        subscribe : function(fn){
+            subscription.push(fn)
+        },
+
+        /**
+         * Unsubscribe, You wont get notified of value changes
+         */
+        unsubscribe : function(){
+            subscription = []
         }
     }
 }
 
 
-window.ElementComposer = class ElementComposer {
+const ElementComposer = class ElementComposer {
     constructor(parent, width, height, options, objectInfo){
         this.id = idCount();
         
@@ -330,6 +349,10 @@ window.ElementComposer = class ElementComposer {
             this.composer.style.left = widthComposer(left);
             this.composer.style.top = heightComposer(top);
         }
+    }
+
+    setTextColor(color){
+        this.element.style.color = color;
     }
 }
 
@@ -487,205 +510,5 @@ function styleElement(layout, type, options) {
     }
 }
 
-
-/**
- * Sets your apps theme
- * @param {string} theme 
- */
-ui.setTheme = (theme) =>{
-    let AppContainer = document.getElementById('AppContainer')
-    if (theme == 'dark'){
-        AppContainer.className = 'mdui-theme-dark';
-    }
-    if (theme == 'light'){
-        AppContainer.className = 'mdui-theme-light'
-    }
-    if (theme == 'auto'){
-        AppContainer.className = 'mdui-theme-auto';
-    }
-}
-
-/**
- * Adds a dialog to your page.
- * @param {String} title 
- * @param {String} description 
- * @param {Object} dialogActions 
- * @returns 
- */
-ui.showDialog = (title, description, actions) =>{
-    return new dialogObject(title, description, actions)
-}
-
-const dialogObject = function (title, description, dialogActions){
-    // Dialog Function
-}
-
-ui.addButton = (parent, text, width, height, icon, options) =>{
-    return new buttonObject(parent, text, width, height, icon, options)
-}
-
-const buttonObject = class extends ElementComposer{
-    constructor(parent, text, width, height, icon, options){
-        super(parent,width, height, options, "Button")
-        this.text = text;
-        this.icon = icon;
-        
-        this.isDisabled = false;
-        this._create()
-    }
-
-    _create(){
-        console.info(`#${idCount()}`)
-        
-        console.info(`addButton() : \n${this.width}, ${this.height}, ${this.options}`)
-
-        this.element = document.createElement('mdui-button');
-        
-        this.element.style.width = widthComposer(this.width);
-            
-        this.element.style.height = heightComposer(this.height);
-    
-        if (this.options.split(',').length == 1){
-            this.element.variant = this.options
-            this.element.textContent = this.text;
-        }
-
-        else {
-            if (this.options.includes('link')){
-
-                this.element.variant = this.options.split(',')[0]
-            }
-            if (this.options.includes('loading')){
-                this.element.loading = true;
-                this.element.textContent = this.text;
-                this.element.variant = this.options.split(',')[0]
-            }
-        }
-
-        if (this.icon) {
-            this._addIcon(this.icon);
-        }
-
-        this.composer.appendChild(this.element)
-    }
-    
-    _addIcon(icon) {
-        const iconElement = document.createElement('mdui-icon');
-        iconElement.slot = "icon";
-        iconElement.name = icon;
-        this.element.insertBefore(iconElement, this.element.firstChild);
-    }
-
-    /**
-     * Set the buttons icon.
-     * @param {any} icon Can be String, Hex, RGBA.
-     */
-    setIcon(icon) {
-        const existingIcon = this.element.querySelector('mdui-icon');
-        if (existingIcon) {
-            existingIcon.name = icon;
-        } else {
-            this._addIcon(icon);
-        }
-    }
-
-    /**
-     * @param {boolean} disable
-     */
-    set disable(disable = false){
-        if (disable) {
-            this.element.disabled = true ;
-            this.isDisabled = true
-        }
-    }
-
-    get disable (){
-        return this.isDisabled;
-    }
-}
-
-
-ui.addImage = (parent, filePath, width, height, options)=>{
-    return new imageObject(parent, filePath, width, height, options);
-}
-
-const imageObject = class extends ElementComposer{
-    constructor(parent, filePath, width, height, options){
-        super(parent, width, height, options)
-
-        this.filePath = filePath
-        this._create()
-    }
-
-    _create(){
-        console.info(`#${idCount()}`);
-        console.info(`addImage() \n ${this.width}, ${this.height}`);
-
-        this.element = document.createElement('img');
-
-        if (!typeof this.width == 'string'){
-            this.element.style.width = this.width ? widthComposer(this.width) : 'fit-content';
-            this.element.style.height = heightComposer(this.height);
-        }
-        else {
-            this.element.style.width = this.width;
-            this.element.style.height = this.height;
-        }
-        
-        if (typeof this.filePath === 'string') this.element.src = this.filePath;
-        else console.info(`The Image Path Is Not A String`)
-
-        this.composer.appendChild(this.element)
-    }
-}
-
-ui.addText = (parent, text, width, height, options) =>{
-    return new textObject(parent, text, width, height, options)
-}
-
-const textObject = class extends ElementComposer{
-    constructor(parent, text, width, height, options){
-        super(parent, width, height, options)
-
-        this.text = text;
-        this._create()
-    }
-    _create(){
-        this.element = document.createElement(this.options.split(',')[0]);
-        this.element.textContent = this.text;
-
-        this.element.style.width = widthComposer(this.width);
-        this.element.style.height = heightComposer(this.height);
-
-        this.composer.appendChild(this.element)
-    }
-}
-
-ui.addNavigationBar = (parent, list, icons, labels, options) =>{
-    return navigationBarObject(parent, list, icons, labels, options)
-}
-
-const navigationBarObject = class extends ElementComposer{
-    constructor(parent, list, icons, labels, options){
-        super(parent, width, height, options)
-
-        this.noOfTabs = this.list.split(',').length;
-        this.list = list;
-        this.icons = icons;
-        this.labels = labels;
-
-        if (this.noOfTabs == this.icons.split(',').length){
-            this._create()
-        }
-        else {
-            console.info('Icon count and List count Uneqaul.')
-        }
-    }
-
-    _create(){
-        this.element = document.createElement('mdui-navigation-bar');
-        // TODO
-    }
-}
 
 // ===================================== End Of File. ==============================================
