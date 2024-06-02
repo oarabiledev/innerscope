@@ -149,15 +149,6 @@ This simple set-up will produce an interface which looks like this:
 
 <br/>
 
-## Decision To Archive ❣️❣️
-
-Euphoria is inspired by DroidScript Hybrid.
-Why build an alternative and not atleast try to help with the project directly.
-I am already building a plugin for Ds, so im deciding to build a hybrid plugin.
-I am building a Material-Design For DroidScript, so why not bring it to Hybrid 
-Too.
-
-<br/>
 Thank You For The Interest ❣️❣️❣️❣️
 
 
