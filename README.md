@@ -11,6 +11,15 @@ the Innerscope.js Syntax ?
 I am activley trying to create a framework which doesn't abstract too much at the same time being
 as well optimized and easy to use and intergrate with existing projects.
 
+You can use innerscope in the browser and through node,
+
+```npm i innerscope```
+
+and as a script tag as 
+
+```<script src="https://unpkg.com/innerscope"></script>```
+
+
 ## A proof of concept
 
 Then create the typical index.html file.
