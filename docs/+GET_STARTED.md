@@ -1,29 +1,26 @@
 
-# ```Getting Started With Euphoria.js```
+# ```Getting Started With InnerScope.js```
 
-Euphoria is not a framework but a library that allows you to create intercative
+InnerScope is not a framework but a library that allows you to create intercative
 interfaces, it can be compared to jQuery and extensible with plugins.
 
-Euphoria is inspired by my former projects such as squidBASE
-The architecture of Euphoria is a minimal js file that provides functions and
+InnerScope is inspired by my former projects such as squidBASE
+The architecture of InnerScope is a minimal js file that provides functions and
 classes that can be extended to create ui, and provide a better and easier
 solution to React / Vue & Svelte.
 
-Euphoria library is designed to work as fast as possible and reduce the memory usage
+InnerScope library is designed to work as fast as possible and reduce the memory usage
 in a product.
 
 When extending the ElementComposer class it will allow you to inherit pre- written
 methods.
 
-Euphoria works on open-source products to make it much more better, these are :
+InnerScope works on open-source products to make it much more better, these are :
 
 - Animate.css
 - Tween.js
 
-To start download the euphoria.zip file which is a folder of how your code should look like.
-
-
-And your index.html file in the same directory as your App.js file.
+To get started add your index.html file in the same directory as your App.js file.
 
 Your html file should look like this:
 
@@ -34,7 +31,8 @@ Your html file should look like this:
     <meta name="viewport" 
     content="width=device-width, initial-scale=1.0" />
 
-    <script src="euphoria.min.js"></script>
+    <script src="https://unpkg.com/innerscope.js"></script>
+    <script src="App.js"></script>
     <style>
         html, body {
             width: 100%;
@@ -47,7 +45,7 @@ Your html file should look like this:
 </head>
 
 <body onload="App = new Application();App.onStart();">
-    <script src="App.js"></script>
+    
 </body>
 
 </html>
