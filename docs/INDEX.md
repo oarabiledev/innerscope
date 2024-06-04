@@ -21,9 +21,7 @@ Euphoria works on open-source products to make it much more better, these are :
 - Tween.js
 
 To start download the euphoria.zip file which is a folder of how your code should look like.
-It should carry this internal structure.
 
-.not-like-us/main.js
 
 And your index.html file in the same directory as your App.js file.
 
@@ -36,7 +34,7 @@ Your html file should look like this:
     <meta name="viewport" 
     content="width=device-width, initial-scale=1.0" />
 
-    <script src=".not-like-us/main.js"></script>
+    <script src="euphoria.min.js"></script>
     <style>
         html, body {
             width: 100%;
