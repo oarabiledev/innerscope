@@ -12,16 +12,8 @@
 
 'use strict'
 
-const ui = new function Euphoria(){
-    /**
-     * Set the title for your ui.
-     * @param {String} title 
-     */
-    this.setTitle = (title) =>{
-        if (typeof title == 'string'){
-            document.title = title;
-        }
-    }
+const ui = new function InnerScope(){
+    
     /**
      * @summary Adds/Loads A Plugin into your ui.
      * @param {string} pluginName 
@@ -30,7 +22,7 @@ const ui = new function Euphoria(){
         var head = document.getElementsByTagName('head')[0];
     
         var plugin = document.createElement('script');
-        plugin.src = './.not-like-us/pluginFolder/' + pluginName + '/main.js';
+        plugin.src = pluginName + '/main.js';
         plugin.async = false;  // Ensure script is executed in order
         plugin.defer = true;   // Defer execution till after parsing
     
@@ -83,13 +75,6 @@ const ui = new function Euphoria(){
         document.getElementsByTagName("head")[0].appendChild(fileref)
     }
 
-    this.loadImageResource = function(fileName){
-        
-    }
-
-    this.addPageRoutes = (pageRoutes) =>{
-
-    }
     /**
      * @summary Redirect To Another Page
      * @param {string} page Filename In Mod Folder.
@@ -494,5 +479,9 @@ function styleElement(layout, type, options) {
     }
 }
 
+if(typeof exports != "undefined"){    
+    exports.ui = ui;
+}
+else { ; }
 
 // ===================================== End Of File. ==============================================
