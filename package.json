@@ -1,0 +1,12 @@
+{
+  "name": "innerscope",
+  "version": "0.0.2",
+  "main": "innerscope.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Oarabile Koore",
+  "license": "MIT",
+  "description": "A simple library for building interfaces with reduced anxiety (❁´◡`❁)"
+}
