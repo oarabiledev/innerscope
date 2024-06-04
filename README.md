@@ -24,9 +24,6 @@ as well optimized and easy to use and intergrate with existing projects.
 ## A proof of concept.
 
 
-Euphoria, by code is inspired by the DroidScript Framework, to get a basic application working, 
-download the **.not-like-us** Folder.
-
 Then create the typical index.html file.
 
 <br/>
@@ -38,7 +35,7 @@ Then create the typical index.html file.
     <meta name="viewport" 
     content="width=device-width, initial-scale=1.0" />
 
-    <script src=".not-like-us/main.js"></script>
+    <script src="euphoria.js"></script>
     <style>
         html, body {
             width: 100%;
@@ -61,11 +58,10 @@ After this, we add our App.js file where all ui is called.
 <br/>
 ```javascript
 class Application {
-	onStart () {
-		let lay = ui.addLayout('linear','fillXY')
-
-		ui.addLayout(lay)
-	}
+  onStart () {
+     let lay = ui.addLayout('linear','fillXY')
+      ui.addLayout(lay)
+   }
 }
 ```
 <br/>
