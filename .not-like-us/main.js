@@ -351,8 +351,8 @@ const ElementComposer = class ElementComposer {
         }
     }
 
-    setTextColor(color){
-        this.element.style.color = color;
+    setMargins (left, top, right, bottom){
+
     }
 }
 
@@ -362,22 +362,6 @@ function idCount(){
     componentId = componentId + 1;
     return componentId;
 }
-
-function _platForm() {
-    const userAgent = navigator.userAgent;
-    if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent)) return "mobile";
-    else if(/iPad/i.test(userAgent)) return "tablet";
-    else return "desktop";
-}
-
-const platform = {
-    mobile: navigator.userAgent.match(/(iPad)|(iPhone)|(iPod)|(android)|(webOS)/i) != null,
-    ios: navigator.userAgent.match(/(iPad)|(iPhone)|(iPod)/i) != null,
-    android: navigator.userAgent.match(/(android)/i) != null,
-    macos: navigator.userAgent.match(/(Macintosh)|(MacIntel)|(MacPPC)|(Mac68K)/i) != null,
-    windows: navigator.userAgent.match(/(Windows NT)|(Win32)|(Win64)|(WOW64)/i) != null,
-    type: _platForm()
-};
 
 
 function layoutObject(type = 'Linear', options = 'FillXY'){
@@ -447,13 +431,13 @@ document.onvisibilitychange = function () {
     if (document.visibilityState === 'hidden') {
         try {
             const App = new window.Application();
-            App.OnPause();
+            App.onPause();
         } catch (err) {}
     }
     else {
         try {
             const App = new window.Application();
-            App.OnResume();
+            App.onResume();
         } catch (err) {}
     }
 };
