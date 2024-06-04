@@ -28,7 +28,7 @@ rememrable and not an eye sore.
 
 For example something like ```mdui```, ```shadcn```,
 do not use those unless you intend to build those design
-systems and port them as plugins for Euphoria.
+systems and port them as plugins for innerscope.
 
 Every element must extend the ```ElementComposer``` class,
 and use the super keyword and with these parameters in
