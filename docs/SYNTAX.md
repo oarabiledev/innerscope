@@ -1,6 +1,6 @@
 # ```Defining A Common Syntax Usable And Adobtable By All```
 
-Euphoria syntax is meant to be easy to understand and rememrable.
+InnerScope syntax is meant to be easy to understand and rememrable.
 
 ## Object Definitions
 
@@ -37,7 +37,7 @@ function names.
 i.e :
 
 ```javascript
-   let a = mdui.addButton(lay, 'Euphoria', 0.8, -1, 'primary')
+   let a = mdui.addButton(lay, 'InnerScope', 0.8, -1, 'primary')
 
    a.setOnTouch(Function)
 
