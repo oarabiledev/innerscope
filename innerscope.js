@@ -18,11 +18,11 @@ const ui = new function InnerScope(){
      * @summary Adds/Loads A Plugin into your ui.
      * @param {string} pluginName 
      */
-    this.loadPlugin = async (pluginName) => {
+    this.loadPlugin = async () => {
         var head = document.getElementsByTagName('head')[0];
     
         var plugin = document.createElement('script');
-        plugin.src = pluginName + '/main.js';
+        plugin.src = pluginName + '.js';
         plugin.async = false;  // Ensure script is executed in order
         plugin.defer = true;   // Defer execution till after parsing
     
@@ -86,7 +86,7 @@ const ui = new function InnerScope(){
         document.body.replaceChildren();
 
         let pageScript = document.createElement('script');
-        pageScript.src = `.src/mod/${page}.js`;
+        pageScript.src = `${page}.js`;
         pageScript.type = 'module';
         
         pageScript.onload = () => {
@@ -429,7 +429,9 @@ document.onvisibilitychange = function () {
 
 function styleElement(layout, type, options) {
     if (type.toLowerCase() == 'linear') {
-        layout.style.display = 'flex';
+        layout.style.display = 'grid';
+        layout.style.alignContent = 'start'
+        
     } else if (type.toLowerCase() === 'card') {
         layout.style.padding = '10px';
         layout.style.borderRadius = '5px';
@@ -452,7 +454,7 @@ function styleElement(layout, type, options) {
             layout.style.justifyContent = 'center';
         }
         if (options.toLowerCase().includes('vcenter')) {
-            layout.style.alignItems = 'center';
+            layout.style.alignContent = 'center';
         }
         if (options.toLowerCase().includes('h/vcenter')) {
             layout.style.justifyContent = 'center';
@@ -464,12 +466,19 @@ function styleElement(layout, type, options) {
         if (options.toLowerCase().includes('top')) {
             layout.style.alignSelf = 'flex-start';
         }
+        if (options.toLowerCase().includes('fillxy')){
+            layout.style.width = 100 + '%';
+            layout.style.height = 100 + '%';
+            
+        }
+
         if (options.toLowerCase().includes('fillx')) {
-            layout.style.width = widthComposer(1);
+            layout.style.width = 100 + '%';
         }
         if (options.toLowerCase().includes('filly')) {
-            layout.style.height = widthComposer(1);
+            layout.style.height = 100 + '%';
         }
+        
         if (options.toLowerCase().includes('horizontal')) {
             layout.style.flexDirection = 'row';
         }
