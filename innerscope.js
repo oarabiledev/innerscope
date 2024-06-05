@@ -339,6 +339,18 @@ const ElementComposer = class ElementComposer {
     setMargins (left, top, right, bottom){
 
     }
+
+    show () {
+        this.composer.visibility = 'visible'
+    }
+
+    hide () {
+        this.composer.visibility = 'hidden'
+    }
+
+    gone () {
+        this.composer.display = 'none'
+    }
 }
 
 let componentId = 0;
@@ -429,9 +441,7 @@ document.onvisibilitychange = function () {
 
 function styleElement(layout, type, options) {
     if (type.toLowerCase() == 'linear') {
-        layout.style.display = 'grid';
-        layout.style.alignContent = 'start'
-        
+        layout.style.display = 'flex';
     } else if (type.toLowerCase() === 'card') {
         layout.style.padding = '10px';
         layout.style.borderRadius = '5px';
@@ -454,7 +464,7 @@ function styleElement(layout, type, options) {
             layout.style.justifyContent = 'center';
         }
         if (options.toLowerCase().includes('vcenter')) {
-            layout.style.alignContent = 'center';
+            layout.style.alignItems = 'center';
         }
         if (options.toLowerCase().includes('h/vcenter')) {
             layout.style.justifyContent = 'center';
@@ -466,19 +476,12 @@ function styleElement(layout, type, options) {
         if (options.toLowerCase().includes('top')) {
             layout.style.alignSelf = 'flex-start';
         }
-        if (options.toLowerCase().includes('fillxy')){
-            layout.style.width = 100 + '%';
-            layout.style.height = 100 + '%';
-            
-        }
-
         if (options.toLowerCase().includes('fillx')) {
-            layout.style.width = 100 + '%';
+            layout.style.width = widthComposer(1);
         }
         if (options.toLowerCase().includes('filly')) {
-            layout.style.height = 100 + '%';
+            layout.style.height = widthComposer(1);
         }
-        
         if (options.toLowerCase().includes('horizontal')) {
             layout.style.flexDirection = 'row';
         }
