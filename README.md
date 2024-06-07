@@ -19,6 +19,10 @@ and as a script tag as
 
 ```<script src="https://unpkg.com/innerscope"></script>```
 
+also using another cdn
+
+```<script src="https://cdn.jsdelivr.net/npm/innerscope@0.0.3/innerscope.min.js"></script>```
+
 
 ## A proof of concept
 
