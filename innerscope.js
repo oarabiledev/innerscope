@@ -102,6 +102,14 @@ const ui = new function InnerScope(){
     }
 
     /**
+     * locks device orient, to specified.
+     * @param {*} orient 
+     */
+    this.setOrientation = (orient) =>{
+        ScreenOrientation.lock(orient)
+    }
+
+    /**
      * @summary Creates a  layout.
      * @param {string} type A layout type, i.e Linear.
      * @param {string} options Options like FillXY.
@@ -129,6 +137,26 @@ const ui = new function InnerScope(){
 }
 
 
+const platform = {
+    mobile : () =>{
+        return navigator.userAgentData.mobile;
+    },
+
+    desktop : () =>{
+        if (!navigator.userAgentData.mobile){
+            let uaPlatform = navigator.userAgentData.platform ;
+
+            if (uaPlatform == undefined) {
+
+            }
+            else return true; 
+        }
+    },
+
+    type : () =>{
+
+    }
+}
 
 const widthComposer = function widthComposer(width) {
     let deviceWidth = window.innerWidth;
@@ -250,6 +278,10 @@ const ElementComposer = class ElementComposer {
         else {
             this.element.className = `animate__animated animate__${animation}`
         }
+    }
+
+    setTween () {
+
     }
 
     /**
@@ -439,6 +471,13 @@ document.onvisibilitychange = function () {
     }
 };
 
+screen.orientation.addEventListener('change',(event)=>{
+    try {
+        const App = new Application();
+        App.onOrient(event)
+    }
+    catch( err ) { ; }
+})
 function styleElement(layout, type, options) {
     if (type.toLowerCase() == 'linear') {
         layout.style.display = 'flex';
