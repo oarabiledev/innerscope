@@ -136,7 +136,6 @@ const ui = new function InnerScope(){
     }
 }
 
-
 const platform = {
     mobile : () =>{
         return navigator.userAgentData.mobile;
@@ -145,16 +144,14 @@ const platform = {
     desktop : () =>{
         if (!navigator.userAgentData.mobile){
             let uaPlatform = navigator.userAgentData.platform ;
-
-            if (uaPlatform == undefined) {
-
-            }
-            else return true; 
+            if (uaPlatform) return true;
+            else return false; 
         }
     },
 
     type : () =>{
-
+        if (navigator.userAgentData.mobile) return 'mobile';
+        else return 'desktop';
     }
 }
 
@@ -258,7 +255,7 @@ const ElementComposer = class ElementComposer {
         this.parent.addChild(this)
     }
 
-    setAnimation(animation, time, callback){
+    Animate(animation, time, callback){
         if (animation && time && callback){
             this.element.className = `animate__animated animate__${animation} 
             --animate-duration: ${time}s`
@@ -280,8 +277,12 @@ const ElementComposer = class ElementComposer {
         }
     }
 
-    setTween () {
+    Tween () {
+        //TODO
+    }
 
+    Style (stylesInJSON) {
+        // TODO
     }
 
     /**
@@ -368,8 +369,12 @@ const ElementComposer = class ElementComposer {
         }
     }
 
-    setMargins (left, top, right, bottom){
+    setMargins (left, top, right, bottom, mode){
+        //TODO
+    }
 
+    setPadding (left, top, right, bottom, mode){
+        //TODO
     }
 
     show () {
@@ -406,24 +411,7 @@ function layoutObject(type = 'Linear', options = 'FillXY'){
         }
     }
 
-    /**
-     * @summary Adds an Animation.
-     * @param {string} animation 
-     * @param {Function} animEndFunc 
-     * @param {number} time 
-     */
-    this.setAnimation = (animation, animEndFunc, time = 800) =>{
-
-    }
-
-    /**
-     * @summary Adds an onClick Event Listener.
-     * @param {Function} onTouch
-     * @returns Object of touch points. 
-     */
-    this.setOnTouch = (onTouch) =>{
-
-    }
+    
     this.setSize = function (width, height, options){
         if(!options){
             this.element.style.width = widthComposer(width);
@@ -433,14 +421,6 @@ function layoutObject(type = 'Linear', options = 'FillXY'){
             this.element.style.width = width + options;
             this.element.style.height = height + options;
         }
-    }
-    /**
-     * @summary Adds an onClick Event Listener.
-     * @param {Function} onTouch
-     * @returns Object of touch points. 
-     */
-    this.setOnTouchMove = (onTouchMove) =>{
-
     }
 
     this.setBackColor = (color = 'teal') =>{
@@ -534,5 +514,141 @@ if(typeof exports != "undefined"){
     exports.ui = ui;
 }
 else { ; }
+
+// Common Elements 
+
+ui.addButton = function(parent, text, width, height, options){
+    return new button(parent, text, width, height, options)
+}
+
+const button = class extends ElementComposer{
+    constructor(parent, text, width, height, options){
+        super(parent, width, height, options, 'Button');
+
+        console.info(`#${idCount()}`)
+        console.info(`addButton() : ${width},${height},${options}`)
+        this._text = text;
+        this._create()
+    }
+
+    _create(){
+        this.element = document.createElement('button');
+        this.element.textContent = this._text;
+
+        this.element.style.width = this.width ? widthComposer(this.width) : 'fit-content';
+        this.element.style.height = this.height ? heightComposer(this.height) : 'fit-content';
+
+        this.composer.appendChild(this.element)
+    }
+
+
+    /**
+     * Adds TextContent Of Button
+     */
+
+    set text(textContent){
+        this.element.textContent = textContent;
+        this._text = textContent;
+    }
+    
+    get text(){
+        return this._text;
+    }
+
+    set textColor(textColor){
+        this.element.style.color = textColor;
+        this.textColor = textColor;
+    }
+
+    get textColor(){
+        return this.textColor;
+    }
+
+    /**
+     * Sets or Gets BackColor
+     */
+    set backColor(color){
+        this.element.style.backgroundColor = color;
+        this.color = color;
+    }
+
+    get backColor(){
+        return this.color;
+    }
+
+    set html(html){
+        this.element.innerHTML = html;
+        this.html = html;
+    }
+
+    get html(){
+        return this.html;
+    }
+}
+
+ui.addImage = function(parent, file, width, height, options){
+    return new imageView(parent, file, width, height, options)
+}
+
+const imageView = class extends ElementComposer{
+    constructor(parent, file, width, height, options){
+        super(parent, width, height, options, 'Image');
+
+        console.info(`#${idCount()}`)
+        console.info(`addImage() : ${width},${height},${options}`)
+
+        this.file = file;
+        this._create()
+    }
+
+    _create(){
+        this.element = document.createElement('img');
+
+        this.element.src = this.file;
+
+        this.element.style.width = this.width ? widthComposer(this.width) : 'auto';
+        if (this.height == -1 || null){
+            this.element.style.height = 'auto' 
+        }
+        else {
+            this.element.style.height = heightComposer(this.height);
+        }
+        
+    }
+}
+
+ui.addHtmlView = function(parent, html, width, height, options){
+    return new htmlView(parent, html, width, height, options)
+}
+
+const htmlView = class extends ElementComposer{
+    constructor(parent, html, width, height, options){
+        super(parent, width, height, options, 'HtmlView');
+
+        console.info(`#${idCount()}`)
+        console.info(`addHtmlView() : ${width},${height},${options}`)
+
+        this._html = html;
+        this._create()
+    }
+
+    _create(){
+        //TODO
+        this.element = document.createDocumentFragment()
+    }
+}
+
+ui.addWebView = function(parent, url, width, height, options){
+    return new webView(parent, url, width, height, options)
+}
+
+const webView = class extends ElementComposer{
+    constructor(parent, url, width, height, options){
+        super(parent, width, height, options, 'WebView');
+
+        this.url = url;
+        //TODO
+    }
+}
 
 // ===================================== End Of File. ==============================================
