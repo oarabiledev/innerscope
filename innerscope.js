@@ -12,8 +12,8 @@
 
 'use strict'
 
+
 const ui = new function InnerScope(){
-    
     /**
      * @summary Adds/Loads A Plugin into your ui.
      * @param {string} pluginName 
@@ -66,7 +66,10 @@ const ui = new function InnerScope(){
         }
         document.getElementsByTagName("head")[0].appendChild(script)
     }
-
+    /**
+     * Adds a css file to head.
+     * @param {string} filepath 
+     */
     this.loadCSS = function (filepath) {
         const fileref = document.createElement("link")
         fileref.rel = "stylesheet"
@@ -155,16 +158,34 @@ const platform = {
     }
 }
 
+/**
+ * This function returns point ratio scale to pixel units
+ * For Width
+ * @param {number} width 
+ * @returns number
+ */
 const widthComposer = function widthComposer(width) {
     let deviceWidth = window.innerWidth;
     return parseFloat(width * deviceWidth)/ 1 + 'px'; 
 }
 
+/**
+ * This function returns point ratio scale to pixel units
+ * For height
+ * @param {number} height 
+ * @returns number
+ */
 const heightComposer = function heightComposer(height) {
     let deviceHeight = window.innerHeight;
     return parseFloat(height * deviceHeight)/ 1 + 'px';
 }
 
+/**
+ * Converts px values to our point based scale.
+ * @param {number} val 
+ * @param {string} side 
+ * @returns number
+ */
 const pxToDeviceRatio = function pxToDeviceRatio(val, side){
     if (side.toLowerCase() == 'w'){
         return val / window.innerWidth;
@@ -174,6 +195,11 @@ const pxToDeviceRatio = function pxToDeviceRatio(val, side){
     }
 }
 
+/**
+ * Creates a signal.
+ * @param {any} defaultVal 
+ * @returns Methods For Working With Signals 
+ */
 const createSignal = function(defaultVal = null){
     let internalVal = defaultVal;
     let subscription = [];
@@ -213,7 +239,15 @@ const createSignal = function(defaultVal = null){
     }
 }
 
-
+/**
+ * Creates a div which adds your element and additional
+ * methods to work with.
+ * @param {object} parent 
+ * @param {number} width 
+ * @param {number} height 
+ * @param {string} options 
+ * @param {string} objectInfo 
+ */
 const ElementComposer = class ElementComposer {
     constructor(parent, width, height, options, objectInfo){
         this.id = idCount();
@@ -255,6 +289,12 @@ const ElementComposer = class ElementComposer {
         this.parent.addChild(this)
     }
 
+    /**
+     * Adds an animation to your object.
+     * @param {string} animation 
+     * @param {number} time 
+     * @param {Function} callback 
+     */
     Animate(animation, time, callback){
         if (animation && time && callback){
             this.element.className = `animate__animated animate__${animation} 
@@ -281,7 +321,7 @@ const ElementComposer = class ElementComposer {
         //TODO
     }
 
-    Style (stylesInJSON) {
+    Styles (stylesInJSON) {
         // TODO
     }
 
@@ -385,6 +425,9 @@ const ElementComposer = class ElementComposer {
         this.composer.visibility = 'hidden'
     }
 
+    /**
+     * It hides the components as if it wasnt there.
+     */
     gone () {
         this.composer.display = 'none'
     }
@@ -403,6 +446,10 @@ function layoutObject(type = 'Linear', options = 'FillXY'){
     console.info(`createLayout() : ${type},${options}`)
     this.element = null;
 
+    /**
+     * Adds an HTML Element to the layout.
+     * @param {*} child 
+     */
     this.addChild = function(child) {
         if (child.element instanceof HTMLElement) {
             this.element.appendChild(child.element);
@@ -423,6 +470,10 @@ function layoutObject(type = 'Linear', options = 'FillXY'){
         }
     }
 
+    /**
+     * Adds Background Color
+     * @param {any} color 
+     */
     this.setBackColor = (color = 'teal') =>{
         this.element.style.backgroundColor = color;
         console.info(`setBackColor() : ${color}`)
@@ -510,101 +561,29 @@ function styleElement(layout, type, options) {
     }
 }
 
-if(typeof exports != "undefined"){    
-    exports.ui = ui;
-}
-else { ; }
+/**
+ * It lets you create any htmlElement, and inherit innerscope methods, and
+ * use the available js methods to that element.
+ * Basically returns document.createElement()
+ * @param {object} parent 
+ * @param {HTMLElement} element 
+ * @param {number} width 
+ * @param {number} height 
+ * @param {string} options 
+ * @returns HTMLELEMENT
+ */
 
-// Common Elements 
-
-ui.addButton = function(parent, text, width, height, options){
-    return new button(parent, text, width, height, options)
-}
-
-const button = class extends ElementComposer{
-    constructor(parent, text, width, height, options){
-        super(parent, width, height, options, 'Button');
-
-        console.info(`#${idCount()}`)
-        console.info(`addButton() : ${width},${height},${options}`)
-        this._text = text;
-        this._create()
-    }
-
-    _create(){
-        this.element = document.createElement('button');
-        this.element.textContent = this._text;
-
-        this.element.style.width = this.width ? widthComposer(this.width) : 'fit-content';
-        this.element.style.height = this.height ? heightComposer(this.height) : 'fit-content';
-
-        this.composer.appendChild(this.element)
-    }
-
-
-    /**
-     * Adds TextContent Of Button
-     */
-
-    set text(textContent){
-        this.element.textContent = textContent;
-        this._text = textContent;
-    }
-    
-    get text(){
-        return this._text;
-    }
-
-    set textColor(textColor){
-        this.element.style.color = textColor;
-        this.textColor = textColor;
-    }
-
-    get textColor(){
-        return this.textColor;
-    }
-
-    /**
-     * Sets or Gets BackColor
-     */
-    set backColor(color){
-        this.element.style.backgroundColor = color;
-        this.color = color;
-    }
-
-    get backColor(){
-        return this.color;
-    }
-
-    set html(html){
-        this.element.innerHTML = html;
-        this.html = html;
-    }
-
-    get html(){
-        return this.html;
-    }
+ui.addElement = function(parent, element, width, height, options){
+    return new htmlElement(parent, element, width, height, options)
 }
 
-ui.addImage = function(parent, file, width, height, options){
-    return new imageView(parent, file, width, height, options)
-}
+const htmlElement = class extends ElementComposer{
+    constructor(parent, element, width, height, options){
+        super(parent, width, height, options, element);
 
-const imageView = class extends ElementComposer{
-    constructor(parent, file, width, height, options){
-        super(parent, width, height, options, 'Image');
-
-        console.info(`#${idCount()}`)
-        console.info(`addImage() : ${width},${height},${options}`)
-
-        this.file = file;
-        this._create()
-    }
-
-    _create(){
-        this.element = document.createElement('img');
-
-        this.element.src = this.file;
+        this.HTMLElement = element;
+        
+        this.element = document.createElement(this.HTMLElement);
 
         this.element.style.width = this.width ? widthComposer(this.width) : 'auto';
         if (this.height == -1 || null){
@@ -613,10 +592,41 @@ const imageView = class extends ElementComposer{
         else {
             this.element.style.height = heightComposer(this.height);
         }
-        
+        this.composer.appendChild(this.element);
+
+        /**
+         * The proxy allows us to call js methods so as
+         * the ones of ElementComposer.
+         */
+        return new Proxy(this, {
+            get(target, prop) {
+                if (prop in target) {
+                    return target[prop];
+                } else {
+                    return target.element[prop];
+                }
+            },
+            set(target, prop, value) {
+                if (prop in target) {
+                    target[prop] = value;
+                } else {
+                    target.element[prop] = value;
+                }
+                return true;
+            }
+        });
     }
 }
 
+/**
+ * Adds an Iframe but just for raw HTML.
+ * @param {object} parent 
+ * @param {string} html 
+ * @param {number} width 
+ * @param {number} height 
+ * @param {string} options 
+ * @returns Ifrane
+ */
 ui.addHtmlView = function(parent, html, width, height, options){
     return new htmlView(parent, html, width, height, options)
 }
@@ -638,6 +648,15 @@ const htmlView = class extends ElementComposer{
     }
 }
 
+/**
+ * Adds an Iframe but loads only websites not HTML
+ * @param {object} parent 
+ * @param {URL} url 
+ * @param {number} width 
+ * @param {number} height 
+ * @param {options} options 
+ * @returns 
+ */
 ui.addWebView = function(parent, url, width, height, options){
     return new webView(parent, url, width, height, options)
 }
@@ -650,5 +669,10 @@ const webView = class extends ElementComposer{
         //TODO
     }
 }
+
+if(typeof exports != "undefined"){    
+    exports.ui = ui;
+}
+else { ; }
 
 // ===================================== End Of File. ==============================================
