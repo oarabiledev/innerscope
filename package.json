@@ -1,12 +1,18 @@
 {
   "name": "innerscope",
-  "version": "0.0.3",
-  "main": "innerscope.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "Oarabile Koore",
+  "version": "0.0.4",
   "license": "MIT",
-  "description": "A simple library for building interfaces with reduced anxiety (❁´◡`❁)"
+
+  "keywords": [
+		"framework",
+    "front-end",
+		"library",
+		"ui"
+	],
+  
+  "main": "innerscope.js",
+  "author": "Oarabile Koore",
+
+	"homepage": "https://github.com/oarabiledev/innerscope",
+  "description": "A  simple library for building interfaces with reduced anxiety <3"
 }
