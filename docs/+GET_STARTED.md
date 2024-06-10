@@ -1,4 +1,3 @@
-
 # ```Getting Started With InnerScope.js```
 
 InnerScope is not a framework but a library that allows you to create intercative
@@ -30,7 +29,13 @@ Your html file should look like this:
 <head>
     <meta name="viewport" 
     content="width=device-width, initial-scale=1.0" />
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/20.0.0/tween.umd.js"></script>
+    
     <script src="https://unpkg.com/innerscope.js"></script>
     <script src="App.js"></script>
     <style>
@@ -51,6 +56,13 @@ Your html file should look like this:
 </html>
 ```
 
+HTML Optimization for ESM :
+
+```html
+<script type="module" src="innerscope.js"></script>
+<script type="module" src="App.js"></script>
+```
+
 And with the App.js file in the same directory should have this format.
 I force usage of classes as it will run in strict mode, which will help
 developers not to make some js pitfalls.
@@ -67,10 +79,84 @@ class Application {
 }
 ```
 
+For ESM:
+
+```javascript
+import { ui } from "./innerscope.js"
+
+class Application {
+    onStart () {
+        let lay = ui.createLayout("linear")
+        lay.setBackColor('teal')
+        
+        ui.addLayout(lay)
+    }
+}
+
+window.Application = Application;
+```
+
 The infastructure of your app, and class are you should also have more functions.
 
-- onBack
 - onPause
 - onResume
 
 I think i dont have to explain each function as they are self explaining.
+
+## ```Builidng Interfaces With InnerScope.js```
+
+InnerScope.js takes a different approach.
+
+Instead of using the document.createElement() api, we use a custom function called
+
+ui.addElement()
+
+This allows us to extend the ElementComposer class, which means you can then use features like
+
+- setOnTouch
+- Animate
+
+**Check ELEMENT.md to see other methods you can use.**
+
+And use document.createElement() methods like
+
+- textContent
+
+This is so because the ui.addElement() will return a proxy allowing us to do this.
+
+The syntax for this function is:
+
+```javascript
+ui.addElement(parent, element, width, height, options)
+```
+
+> [!NOTE]
+> element, is an HTMLELEMENT or even a litty custom element, you
+> pass strings like button or img.
+
+A simple example is :
+
+```javascript
+
+class Application {
+    onStart () {
+        let lay = ui.createLayout("linear", "fillxy,top" )
+
+        let btn = ui.addElement(lay, 'button', 0.2, 0.05, '')
+
+        /* Usage Of Dom Method */
+
+        btn.textContent = 'InnerScope'
+
+        /* Usage Of InnerScope Method */
+        btn.setOnTouch(()=>{
+            console.log('A simple Demo')
+        })
+        
+        ui.addLayout(lay)
+    }
+}
+
+```
+
+I advise this is used for single elements and those that get nested a custom component is built, refer to the ELEMENT.md documentation.
