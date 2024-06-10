@@ -18,13 +18,13 @@ const ui = new function InnerScope(){
      * @summary Adds/Loads A Plugin into your ui.
      * @param {string} pluginName 
      */
-    this.loadPlugin = async () => {
+    this.loadPlugin = async (pluginName) => {
         var head = document.getElementsByTagName('head')[0];
     
         var plugin = document.createElement('script');
         plugin.src = pluginName + '.js';
-        plugin.async = false;  // Ensure script is executed in order
-        plugin.defer = true;   // Defer execution till after parsing
+        plugin.async = false;  
+        plugin.defer = true;   
     
         // Return a promise that resolves when the script is loaded
         await new Promise((resolve, reject) => {
@@ -87,15 +87,15 @@ const ui = new function InnerScope(){
 		window.history.pushState({ path: pageUrl }, '', pageUrl);
 
         document.body.replaceChildren();
-
+        console.info(`${page} Is loading...`)
+        
         let pageScript = document.createElement('script');
         pageScript.src = `${page}.js`;
-        pageScript.type = 'module';
         
         pageScript.onload = () => {
             try {
-                const App = new window.Application();
-                App.OnStart();
+                const App = new Page();
+                App.onStart();
             } catch (err) {
                 console.error(err);
             }
@@ -446,9 +446,11 @@ function layoutObject(type = 'Linear', options = 'FillXY'){
     console.info(`createLayout() : ${type},${options}`)
     this.element = null;
 
+    let layout = type;
+
     /**
      * Adds an HTML Element to the layout.
-     * @param {*} child 
+     * @param {HTMLElement} child 
      */
     this.addChild = function(child) {
         if (child.element instanceof HTMLElement) {
@@ -458,7 +460,12 @@ function layoutObject(type = 'Linear', options = 'FillXY'){
         }
     }
 
-    
+    /**
+     * Sets the layout size
+     * @param {number} width 
+     * @param {number} height 
+     * @param {string} options 
+     */
     this.setSize = function (width, height, options){
         if(!options){
             this.element.style.width = widthComposer(width);
@@ -479,6 +486,37 @@ function layoutObject(type = 'Linear', options = 'FillXY'){
         console.info(`setBackColor() : ${color}`)
     }
 
+    /**
+     * Applies a shadow to a card layout.
+     * @param {*} elevation 
+     */
+    this.setElevation = (elevation) =>{
+        if (layout === 'Absolute'){
+            this.element.style.zIndex = elevation * 1000;
+        } else {
+            console.info('Cannot set elevation to non absolute layout.');
+        }
+    }
+    
+    this.getType = () =>{
+        return layout;
+    }
+
+    this.show = () =>{
+        this.element.visibility = 'visible'
+    }
+
+    this.hide = () =>{
+        this.element.visibility = 'hidden'
+    }
+
+    /**
+     * It hides the components as if it wasnt there.
+     */
+    this.gone = () =>{
+        this.element.display = 'none'
+    }
+    
     this.element = document.createElement('div');
     this.element.style.width = widthComposer(1)
     this.element.style.height = heightComposer(1)
@@ -585,9 +623,9 @@ const htmlElement = class extends ElementComposer{
         
         this.element = document.createElement(this.HTMLElement);
 
-        this.element.style.width = this.width ? widthComposer(this.width) : 'auto';
+        this.element.style.width = this.width ? widthComposer(this.width) : 'fit-content';
         if (this.height == -1 || null){
-            this.element.style.height = 'auto' 
+            this.element.style.height = 'fit-content' 
         }
         else {
             this.element.style.height = heightComposer(this.height);
@@ -675,4 +713,5 @@ if(typeof exports != "undefined"){
 }
 else { ; }
 
-// ===================================== End Of File. ==============================================
+
+/* ===================================== End Of File. ============================================== */
