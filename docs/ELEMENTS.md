@@ -28,7 +28,7 @@ rememrable and not an eye sore.
 
 For example something like ```mdui```, ```shadcn```,
 do not use those unless you intend to build those design
-systems and port them as plugins for innerscope.
+systems and port them as plugins for Euphoria.
 
 Every element must extend the ```ElementComposer``` class,
 and use the super keyword and with these parameters in
@@ -112,7 +112,8 @@ dont have to create your own self.
 
 - setPosition
 - setMargins
-- setAnimation
+- Animate
+- Tween
 - setOnTouch
 - setOnDblClick
 - setOnClick
@@ -122,9 +123,6 @@ dont have to create your own self.
 - show
 - hide
 - gone
-- destroy
-- width
-- height
 
 Also if you want pixel units to be converted to the 0 to 1 scale
 use this function -- ```pxToDeviceRatio(value, side)```.
