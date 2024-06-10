@@ -4,15 +4,15 @@
   "license": "MIT",
 
   "keywords": [
-		"framework",
+    "framework",
     "front-end",
-		"library",
-		"ui"
-	],
+    "library",
+    "ui"
+  ],
   
   "main": "innerscope.js",
   "author": "Oarabile Koore",
 
-	"homepage": "https://github.com/oarabiledev/innerscope",
+  "homepage": "https://github.com/oarabiledev/innerscope",
   "description": "A  simple library for building interfaces with reduced anxiety <3"
 }
