@@ -249,21 +249,20 @@ const createSignal = function(defaultVal = null){
  * @param {string} objectInfo 
  */
 const ElementComposer = class ElementComposer {
-    constructor(parent, width, height, options, objectInfo){
+    constructor(parent, width, height, options, object){
         this.id = idCount();
         
         this.width = width;
         this.height = height;
         this.parent = parent;
-        this.objectInfo = objectInfo;
-
-        
+        this.object = object;
         this.options = options.toLowerCase();
-
+        
         // We Then Render The Div & Components
+
         this.composer = document.createElement('div');
         this.composer.id = this.id;
-        
+
 
         if (typeof this.width == 'number'){
             if (this.width == -1){
@@ -285,8 +284,20 @@ const ElementComposer = class ElementComposer {
             this.composer.height = this.height;
         }
         this.element = this.composer;
+        this.parent.addChild(this);
 
-        this.parent.addChild(this)
+    }
+
+    /**
+     * Add a child element, only use with ui.addElement()
+     * @param {*} child 
+     */
+    addChild(child) {
+        if (child instanceof HTMLElement) {
+            this.element.appendChild(child);
+        } else {
+            console.error('Not An HTMLElement');
+        }
     }
 
     /**
@@ -295,7 +306,7 @@ const ElementComposer = class ElementComposer {
      * @param {number} time 
      * @param {Function} callback 
      */
-    Animate(animation, time, callback){
+    animate(animation, time, callback){
         if (animation && time && callback){
             this.element.className = `animate__animated animate__${animation} 
             --animate-duration: ${time}s`
@@ -317,12 +328,8 @@ const ElementComposer = class ElementComposer {
         }
     }
 
-    Tween () {
+    tween () {
         //TODO
-    }
-
-    Styles (stylesInJSON) {
-        // TODO
     }
 
     /**
@@ -332,104 +339,31 @@ const ElementComposer = class ElementComposer {
      * @param {Function} onTouch 
      */
     setOnTouch(onTouch){
-        if (platform.type == 'mobile'){
-            this.composer.addEventListener('mouseup',(event) =>{
-                onTouch(event)
-            })
-        }
-        else {
-            this.composer.addEventListener('mousedown', (event) =>{
-                onTouch(event)
-            })
-        }
-    }
-
-    /**
-     * Add a function to be called on a click event.
-     * @param {Function} onClick 
-     */
-    setOnClick(onClick){
-        this.composer.addEventListener('click',(event)=>{
-            onClick(event)
+        this.touchEvent = platform.mobile == 'mobile' ? 'mouseup' : 'mousedown';
+        this.composer.addEventListener(this.touchEvent, (event) =>{
+            onTouch(event)
         })
-    }
-
-    setOnDblClick(onDblClick){
-        this.composer.addEventListener('dblclick',(event)=>{
-            onDblClick(event)
-        })
-    }
-    /**
-     * Adds OnMouseUp event listener
-     * @param {Function} onMouseUp 
-     */
-    setOnMouseUp(onMouseUp){
-        this.composer.addEventListener('mouseup',(event)=>{
-            onMouseUp(event)
-        })
-    }
-
-    /**
-     * Adds mousedown event-listener
-     * @param {Function} onMouseDown 
-     */
-    setOnMouseDown(onMouseDown){
-        this.composer.addEventListener('mousedown',(event)=>{
-            onMouseDown(event)
-        })
-    }
-    /**
-     * Adds mouseover listener
-     * @param {Function} onMouseOver 
-     */
-    setOnMouseOver(onMouseOver){
-        this.composer.addEventListener('mouseover',(event)=>{
-            onMouseOver(event)
-        })
-    }
-    /**
-     * Sets the elements position if it lays in an
-     * Absolute layout
-     * @param {number} left 
-     * @param {number} top 
-     * @param {number} width 
-     * @param {number} height 
-     */
-    setPosition (left, top, width, height){
-        this.composer.style.position = 'absolute'
-        
-        if (width){
-            this.composer.style.left = widthComposer(left - 1/2 * (width))
-            this.composer.style.top =  heightComposer(top)
-
-        }
-        else {
-            this.composer.style.left = widthComposer(left);
-            this.composer.style.top = heightComposer(top);
-        }
-    }
-
-    setMargins (left, top, right, bottom, mode){
-        //TODO
-    }
-
-    setPadding (left, top, right, bottom, mode){
-        //TODO
+        this.onTouch = onTouch;
     }
 
     show () {
-        this.composer.visibility = 'visible'
+        this.element.style.visibility = 'visible'
     }
 
     hide () {
-        this.composer.visibility = 'hidden'
+        this.element.style.visibility = 'hidden'
+    }
+
+    gone () {
+        this.element.style.display = 'none'
     }
 
     /**
      * It hides the components as if it wasnt there.
      */
-    gone () {
-        this.composer.display = 'none'
+    destroy () {
+        this.element.removeEventListener(this.touchEvent, this.onTouch);
+        this.element.remove()
     }
 }
 
