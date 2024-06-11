@@ -338,7 +338,7 @@ const ElementComposer = class ElementComposer {
      * desktop onmousedown is used.
      * @param {Function} onTouch 
      */
-    setOnTouch(onTouch){
+    onTouch(onTouch){
         this.touchEvent = platform.mobile == 'mobile' ? 'mouseup' : 'mousedown';
         this.composer.addEventListener(this.touchEvent, (event) =>{
             onTouch(event)
@@ -641,11 +641,5 @@ const webView = class extends ElementComposer{
         //TODO
     }
 }
-
-if(typeof exports != "undefined"){    
-    exports.ui = ui;
-}
-else { ; }
-
 
 /* ===================================== End Of File. ============================================== */
