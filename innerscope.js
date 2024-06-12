@@ -205,7 +205,7 @@ const createSignal = function(defaultVal = null){
     let subscription = [];
 
     function notifier (){
-        for (subscriber of subscription){
+        for (let subscriber of subscription){
             subscriber(internalVal)
         }
     }
@@ -252,6 +252,7 @@ const ElementComposer = class ElementComposer {
     constructor(parent, width, height, options, object){
         this.id = idCount();
         
+        this.state = {};
         this.width = width;
         this.height = height;
         this.parent = parent;
@@ -289,6 +290,25 @@ const ElementComposer = class ElementComposer {
     }
 
     /**
+     * Adds an animation to your object.
+     * @param {string} animation 
+     * @param {number} time 
+     * @param {Function} callback 
+     */
+    animate(animation, callback){
+        this.element.classList.add(`animate__animated`, `animate__${animation}`)
+        
+        if (typeof callback == 'function'){
+            this.element.addEventListener('animationend',callback())
+        }
+        else {
+            this.element.addEventListener('animationend',()=>{
+                this.element.classList.remove(`animate__animated`, `animate__${animation}`)
+            })
+        }
+    }
+
+    /**
      * Add a child element, only use with ui.addElement()
      * @param {*} child 
      */
@@ -300,36 +320,19 @@ const ElementComposer = class ElementComposer {
         }
     }
 
-    /**
-     * Adds an animation to your object.
-     * @param {string} animation 
-     * @param {number} time 
-     * @param {Function} callback 
-     */
-    animate(animation, time, callback){
-        if (animation && time && callback){
-            this.element.className = `animate__animated animate__${animation} 
-            --animate-duration: ${time}s`
-            this.element.addEventListener('animationend',callback())
-        }
-
-        else if (animation && time){
-            this.element.className = `animate__animated animate__${animation} 
-            --animate-duration: ${time}s`
-        }
-
-        else if (animation && callback){
-            this.element.className = `animate__animated animate__${animation}`
-            this.element.addEventListener('animationend',callback())
-        }
-
-        else {
-            this.element.className = `animate__animated animate__${animation}`
-        }
+    bindSignal(signal, callback){
+        console.debug(signal, callback)
+        signal.subscribe(function(value){
+            callback(value);
+        })
     }
 
-    tween () {
-        //TODO
+    /**
+     * It destroys the component, and is removed from DOM.
+     */
+    destroy () {
+        this.element.removeEventListener(this.touchEvent, this.onTouch);
+        this.element.remove()
     }
 
     /**
@@ -346,24 +349,37 @@ const ElementComposer = class ElementComposer {
         this.onTouch = onTouch;
     }
 
+    /**
+     * If condition is true the element is made visible.
+     * @param {boolean} condition 
+     */
+    showIf (condition){
+        this.element.style.display = condition ? 'block' : 'none';
+    }
+
+    /**
+     * Sets the Element Visibility To Visible
+     */
     show () {
         this.element.style.visibility = 'visible'
     }
 
+    /**
+     * Sets Element Visibility To Hidden
+     */
     hide () {
         this.element.style.visibility = 'hidden'
     }
 
+    /**
+     * Hides the element as if it was'nt there.
+     */
     gone () {
         this.element.style.display = 'none'
     }
 
-    /**
-     * It hides the components as if it wasnt there.
-     */
-    destroy () {
-        this.element.removeEventListener(this.touchEvent, this.onTouch);
-        this.element.remove()
+    tween (){
+        TODO
     }
 }
 
@@ -481,6 +497,7 @@ screen.orientation.addEventListener('change',(event)=>{
     }
     catch( err ) { ; }
 })
+
 function styleElement(layout, type, options) {
     if (type.toLowerCase() == 'linear') {
         layout.style.display = 'flex';
