@@ -1,15 +1,23 @@
 # ```Writing Custom Components```
 
-Custom elements are implemented in pure JS and CSS or SCSS.
-You can use html elements built with litty to define
-custom elements.
+There are two ways to write your own custom elements :
 
-This is so because under the hood the DOM Api
-```document.createElement()``` is used.
+- Extending HTMLElement
+- Writing Custom Ui Functions
 
-Therefore a litty element can be passed in as long
-as the required resources are loaded using
-```ui.loadCSS()``` or ```ui.loadScript()```.
+## Extending HTMLElement
+
+This is basically taking advantage of custom elements and creating them, i advise you read how to implement on at [MDN Docs #Using Custom Elements](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements)
+
+After defining your custom element add it to your html as a script tag or use ```ui.loadScript()```
+
+To call your custom element, you can then use the ```ui.addElement(parent, element, width, height, options)``` function.
+
+This function exposes the innerscope methods and returns a proxy therefore any custom functions you have added in your ```connectedCallback``` function will still be accessible.
+
+For an active example check the homepage and take a peek at the code.
+
+## Writing Custom Ui Functions
 
 > - [For width and height units we use a 0 to 1 scale for the width and heigt]
 
@@ -22,13 +30,13 @@ console.info(`createLayout() : ${type},${options}`)
 ```
 
 To build a custom element define your custom object,
-do not extennd the ```ui``` object, choose your own.
+extennd the ```ui``` object, or choose your own.
 We suggest that the object is upto 7 characters long,
 rememrable and not an eye sore.
 
 For example something like ```mdui```, ```shadcn```,
 do not use those unless you intend to build those design
-systems and port them as plugins for Euphoria.
+systems and port them as plugins for innerscope.
 
 Every element must extend the ```ElementComposer``` class,
 and use the super keyword and with these parameters in
@@ -111,18 +119,21 @@ When you create an elemnt this way, it will inherit these properties and methods
 dont have to create your own self.
 
 - setPosition
+- setPadding
 - setMargins
-- Animate
-- Tween
-- setOnTouch
-- setOnDblClick
-- setOnClick
-- setOnMouse (Down/Up)
+- bindSignal
+- addChild
+- animate
+- tween
+- onTouch
 - setScale
 - setSize
+- showIf
 - show
 - hide
 - gone
+
+For further information on these methods check the METHODS Documentation.
 
 Also if you want pixel units to be converted to the 0 to 1 scale
 use this function -- ```pxToDeviceRatio(value, side)```.
@@ -132,3 +143,4 @@ For an elements with many document.createElement() Api's I advice you
 use **DocumentFragments**
 Also reduce usage of innerHTML, that causes a re-render by the web engine
 of the HTML, that is time consuming and makes apps slow.
+I also recommend using the destroy function instead of hide or gone for components that will not return.
