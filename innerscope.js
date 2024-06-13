@@ -321,11 +321,11 @@ const ElementComposer = class ElementComposer {
     }
 
     bindSignal(signal, callback){
-        console.debug(signal, callback)
         signal.subscribe(function(value){
             callback(value);
         })
     }
+
 
     /**
      * It destroys the component, and is removed from DOM.
@@ -348,6 +348,7 @@ const ElementComposer = class ElementComposer {
         })
         this.onTouch = onTouch;
     }
+    
 
     /**
      * If condition is true the element is made visible.
@@ -380,6 +381,19 @@ const ElementComposer = class ElementComposer {
 
     tween (){
         TODO
+    }
+
+    setPosition (){
+        TODO
+    }
+
+    setMargins (){
+
+    }
+
+    setPadding (){
+
+
     }
 }
 
