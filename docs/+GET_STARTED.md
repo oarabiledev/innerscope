@@ -131,7 +131,7 @@ ui.addElement(parent, element, width, height, options)
 ```
 
 > [!NOTE]
-> element, is an HTMLELEMENT or even a litty custom element, you
+> element, is an HTMLELEMENT or even a custom element, you
 > pass strings like button or img.
 
 A simple example is :
@@ -160,3 +160,16 @@ class Application {
 ```
 
 I advise this is used for single elements and those that get nested a custom component is built, refer to the ELEMENT.md documentation.
+
+## Apart the onStart Function
+
+You can add other functions like :
+
+- onPause
+- onResume
+- onOrient
+
+The onPause function is fired when the user leaves your application, either switching tabs or minimizing the browser.
+The onResume function will get called after that.
+
+The onOrient function is called when the orientation is changed.
