@@ -22,7 +22,7 @@ and as a script tag as
 
 also using another cdn
 
-```<script src="https://cdn.jsdelivr.net/npm/innerscope@0.0.3/innerscope.min.js"></script>```
+```<script src="https://cdn.jsdelivr.net/npm/innerscope@0.0.6/innerscope.min.js"></script>```
 
 ## A proof of concept
 
@@ -70,7 +70,7 @@ class Application {
 
      let btn = ui.addElement(lay, 'button', 0.02,0.2, '');
      btn.textContent = 'InnerScope JS'
-     btn.setOnTouch(()=>{
+     btn.onTouch(()=>{
         console.log(`A showcase of InnerScope.js`)
      })
      ui.addLayout(lay)
@@ -82,7 +82,7 @@ However if you are ESM first then do it this way :
 
 You import the esm version of the script.
 
-```https://unpkg.com/innerscope@0.0.4/innerscope.esm.js```
+```https://unpkg.com/innerscope@0.0.6/innerscope.esm.js```
 
 Your Html file should have this structure.
 
@@ -131,7 +131,7 @@ class Application {
 
         let btn = ui.addElement(lay, 'button', 0.2, 0.05, '')
         btn.textContent = 'InnerScope'
-        btn.setOnTouch(()=>{
+        btn.onTouch(()=>{
             console.log(`A showcase of InnerScope.js`)
         })
         
