@@ -1,10 +1,10 @@
 # ```Defining A Common Syntax Usable And Adobtable By All```
 
-Euphoria syntax is meant to be easy to understand and rememrable.
+InnerScope syntax is meant to be easy to understand and rememrable.
 
 ## Object Definitions
 
-For every component it should use a short object definition that is not the
+For every component it should use a short object definition if its a personal project the
 ```ui``` object.
 
 For example if Material Design UI plugin was developed, id advise its top
