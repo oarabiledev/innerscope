@@ -142,5 +142,8 @@ class Application {
 window.Application = Application;
 ```
 
+To build a new project, download the inxTemplate.zip file from releases tab and
+get started, good luck coding >3.
+
 For more information check the GET_STARTED.md documentation in the docs folder.
 Thank You For The Interest ❣️❣️❣️
