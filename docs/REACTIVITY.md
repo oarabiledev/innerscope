@@ -1,4 +1,12 @@
-# ```Industry's Obsession With Signals```
+# ```Implementing Reactivity```
+
+To implement reactivity the following functions are provided :
+
+- createSignal
+- createState
+- useState
+
+## ```Industry's Obsession With Signals```
 
 Signals provide some form of reactivity atleast when done well.
 
@@ -35,3 +43,17 @@ isQuicheEater.subscribe((val)=>{
 })
 quicheEaterTest('tHeo');
 ```
+
+## ```Inspiration From React Query```
+
+Firstly lets talk about the difference between createState and useState.
+
+`createState` returns an object and its methods linked, these methods are :
+
+- setState
+- getState
+- subscribe
+
+The `setState` method allows you to define a new varaible for that function, and `getState` retrieves the value.
+
+`useState` is a direct copy of React's useState Hook, it returns an array of function that you can apply destructuring to, to implement a reactivity model.
