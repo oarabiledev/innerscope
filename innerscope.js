@@ -141,20 +141,15 @@ const ui = new function InnerScope(){
 
 const platform = {
     mobile : () =>{
-        return navigator.userAgentData.mobile;
+        return navigator.userAgentData?.mobile || false;
     },
 
     desktop : () =>{
-        if (!navigator.userAgentData.mobile){
-            let uaPlatform = navigator.userAgentData.platform ;
-            if (uaPlatform) return true;
-            else return false; 
-        }
+        return !navigator.userAgentData?.mobile;
     },
 
     type : () =>{
-        if (navigator.userAgentData.mobile) return 'mobile';
-        else return 'desktop';
+        return navigator.userAgentData?.mobile ? 'mobile' : 'desktop';
     }
 }
 
@@ -192,50 +187,6 @@ const pxToDeviceRatio = function pxToDeviceRatio(val, side){
     }
     else {
         return val / window.innerHeight;
-    }
-}
-
-/**
- * Creates a signal.
- * @param {any} defaultVal 
- * @returns Methods For Working With Signals 
- */
-const createSignal = function(defaultVal = null){
-    let internalVal = defaultVal;
-    let subscription = [];
-
-    function notifier (){
-        for (let subscriber of subscription){
-            subscriber(internalVal)
-        }
-    }
-    return {
-        
-        set value(value){
-            internalVal = value;
-            notifier();
-        },
-
-        get value(){
-            return internalVal;
-        },
-
-        /**
-         * Subscribe to any changes to your value
-         * The new value will be passed into your
-         * Function.
-         * @param {Function} fn 
-         */
-        subscribe : function(fn){
-            subscription.push(fn)
-        },
-
-        /**
-         * Unsubscribe, You wont get notified of value changes
-         */
-        unsubscribe : function(){
-            subscription = []
-        }
     }
 }
 
@@ -320,12 +271,17 @@ const ElementComposer = class ElementComposer {
         }
     }
 
+    /**
+     * Binds a signal, and when the value is change
+     * your callback is fired.
+     * @param {*} signal 
+     * @param {*} callback 
+     */
     bindSignal(signal, callback){
         signal.subscribe(function(value){
             callback(value);
         })
     }
-
 
     /**
      * It destroys the component, and is removed from DOM.
@@ -672,5 +628,105 @@ const webView = class extends ElementComposer{
         //TODO
     }
 }
+
+/**
+ * Creates a signal.
+ * @param {any} defaultVal 
+ * @returns Methods For Working With Signals 
+ */
+const createSignal = function(defaultVal = null){
+    let internalVal = defaultVal;
+    let subscription = [];
+
+    function notifier (){
+        for (let subscriber of subscription){
+            subscriber(internalVal)
+        }
+    }
+    return {
+        
+        set value(value){
+            internalVal = value;
+            notifier();
+        },
+
+        get value(){
+            return internalVal;
+        },
+
+        /**
+         * Subscribe to any changes to your value
+         * The new value will be passed into your
+         * Function.
+         * @param {Function} fn 
+         */
+        subscribe : function(fn){
+            subscription.push(fn)
+        },
+
+        /**
+         * Unsubscribe, You wont get notified of value changes
+         */
+        unsubscribe : function(){
+            subscription = []
+        }
+    }
+}
+
+/**
+ * Creates A State Value, And Returns An Object With
+ * Methods To getState, setState and subscribe
+ * @param {*} initialState 
+ * @returns object
+ */
+const createState = function(initialState) {
+    let state = initialState;
+    let listeners = [];
+
+    const getState = () => state;
+
+    const setState = (newState) => {
+        state = newState;
+        listeners.forEach(listener => listener(state));
+    };
+
+    const subscribe = (listener) => {
+        listeners.push(listener);
+        return () => {
+            listeners = listeners.filter(l => l !== listener);
+        };
+    };
+
+    return {getState, setState, subscribe};
+}
+
+/**
+ * Creates a state, and returns an array of functions
+ * Works like react
+ * @param {*} initialState 
+ * @returns array
+ */
+const useState = function(initialState) {
+    let state = initialState;
+    let listeners = [];
+
+    const getState = () => state;
+
+    const setState = (newState)=>{
+        state = newState;
+        listeners.forEach(listener => listener(state))
+    }
+
+    const subscribe = (listener) =>{
+        listeners.push(listener);
+        return () => {
+            listener = listeners.filter(l => l !== listener);
+        }
+    }
+
+    return [getState, setState]
+}
+
+
 
 /* ===================================== End Of File. ============================================== */
