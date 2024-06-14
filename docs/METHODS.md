@@ -8,24 +8,6 @@ InnerScope.js methods provide you with quick functions to use instad of working 
 
 Here is a list of them, and proposed methods :
 
-## animate
-
-Uses Animate.css library to add animations to an element.
-
-It has this syntax :
-
-```javascript
-this.animate(animation, callback);
-```
-
-Instead of writing the animation as "animate__animated animate__bounce", its shortened to "bounce".
-
-Visit the [Animate.css](https://animate.style/) website and copy the animation name as a parameter.
-
-When you copy you will  get in this format ```animate__bounce```, remove the ```animate__``` and pass in the name.
-
-The callback parameter is the function that will be called after the animation ends.
-
 ## addChild
 
 addChild is the counterpart of appendChild, however if you use appendChild on a variable using ui.addElement().
@@ -35,7 +17,7 @@ You will get an error 'Illegal return statement'.
 > Here is when addChild is used :
 
 ```javascript
-let navBar = ui.addElement(lay, 'nav', 1, pxToDeviceRatio(64,'h'), '')
+let navBar = ui.createElement(lay, 'nav', 1, pxToDeviceRatio(64,'h'), '')
         navBar.className = 'nav'
 
         let navTitle = document.createElement('span');
@@ -104,19 +86,3 @@ Sets visibility to hidden.
 ## gone
 
 Sets display to none, making the element look like it was never there.
-
-## tween
-
-TODO
-
-## setPosition
-
-TODO
-
-## setMargins
-
-TODO
-
-## setPadding
-
-TODO
