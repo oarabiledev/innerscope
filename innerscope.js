@@ -14,31 +14,6 @@
 
 
 const ui = new function InnerScope(){
-    /**
-     * @summary Adds/Loads A Plugin into your ui.
-     * @param {string} pluginName 
-     */
-    this.loadPlugin = async (pluginName) => {
-        var head = document.getElementsByTagName('head')[0];
-    
-        var plugin = document.createElement('script');
-        plugin.src = pluginName + '.js';
-        plugin.async = false;  
-        plugin.defer = true;   
-    
-        // Return a promise that resolves when the script is loaded
-        await new Promise((resolve, reject) => {
-            plugin.onload = function () {
-                console.info(`ui.loadPlugin() : ${pluginName}`);
-                resolve();
-            };
-            plugin.onerror = function () {
-                reject(new Error(`Failed to load plugin: ${pluginName}`));
-            };
-            head.appendChild(plugin);
-        });
-    
-    };
 
     /**
      * @summary Add or reference a js file. 
@@ -200,63 +175,67 @@ const pxToDeviceRatio = function pxToDeviceRatio(val, side){
  * @param {string} objectInfo 
  */
 const ElementComposer = class ElementComposer {
-    constructor(parent, width, height, options, object){
+    constructor(parent, width, height, options = null, object){
         this.id = idCount();
         
-        this.state = {};
         this.width = width;
         this.height = height;
         this.parent = parent;
         this.object = object;
-        this.options = options.toLowerCase();
+        this.options = options ? options.toLowerCase() : null
         
         // We Then Render The Div & Components
 
         this.composer = document.createElement('div');
         this.composer.id = this.id;
 
+        /**
+         * This series of if checks does this :
+         * When height or width is -1 or null the value returned
+         * is fit-content
+         * If those values are not intergers then eqaute them, thus 
+         * allowing you to add width as '1.2rem'
+         */
 
-        if (typeof this.width == 'number'){
-            if (this.width == -1){
+        if (typeof this.width === 'number' || typeof this.width === 'string') {
+            if (this.width === -1 || this.width === null) {
                 this.composer.style.width = 'fit-content';
-                this.composer.style.height = heightComposer(this.height); 
-            }
-            else if (this.height == -1){
+            } else if (typeof this.width === 'string') {
+                this.composer.style.width = this.width;
+            } else {
                 this.composer.style.width = widthComposer(this.width);
-                this.composer.style.height = 'fit-content'
             }
-            else {
-                this.composer.style.width = widthComposer(this.width);
-                this.composer.style.height = heightComposer(this.height); 
-            }
+        } else {
+            this.composer.style.width = 'fit-content';
         }
+        
+        if (typeof this.height === 'number' || typeof this.height === 'string') {
+            if (this.height === -1 || this.height === null) {
+                this.composer.style.height = 'fit-content';
+            } else if (typeof this.height === 'string') {
+                this.composer.style.height = this.height;
+            } else {
+                this.composer.style.height = heightComposer(this.height);
+            }
+        } else {
+            this.composer.style.height = 'fit-content';
+        }
+        
+        // Options Stuff
 
-        else {
-            this.composer.width = this.width;
-            this.composer.height = this.height;
+        if (typeof this.options == 'string'){
+            let noOfOptions = this.options.split(',').length;
+
+            // Will loop over options and set em to true
+            for (let x = 0 ; x < noOfOptions ; x ++){
+                this.element[x] = true;
+            }
         }
+        else { ; }
+        
         this.element = this.composer;
         this.parent.addChild(this);
 
-    }
-
-    /**
-     * Adds an animation to your object.
-     * @param {string} animation 
-     * @param {number} time 
-     * @param {Function} callback 
-     */
-    animate(animation, callback){
-        this.element.classList.add(`animate__animated`, `animate__${animation}`)
-        
-        if (typeof callback == 'function'){
-            this.element.addEventListener('animationend',callback())
-        }
-        else {
-            this.element.addEventListener('animationend',()=>{
-                this.element.classList.remove(`animate__animated`, `animate__${animation}`)
-            })
-        }
     }
 
     /**
@@ -335,21 +314,8 @@ const ElementComposer = class ElementComposer {
         this.element.style.display = 'none'
     }
 
-    tween (){
+    update (){
         TODO
-    }
-
-    setPosition (){
-        TODO
-    }
-
-    setMargins (){
-
-    }
-
-    setPadding (){
-
-
     }
 }
 
@@ -532,7 +498,7 @@ function styleElement(layout, type, options) {
  * @returns HTMLELEMENT
  */
 
-ui.addElement = function(parent, element, width, height, options){
+ui.createElement = function(parent, element, width, height, options){
     return new htmlElement(parent, element, width, height, options)
 }
 
@@ -577,57 +543,6 @@ const htmlElement = class extends ElementComposer{
     }
 }
 
-/**
- * Adds an Iframe but just for raw HTML.
- * @param {object} parent 
- * @param {string} html 
- * @param {number} width 
- * @param {number} height 
- * @param {string} options 
- * @returns Ifrane
- */
-ui.addHtmlView = function(parent, html, width, height, options){
-    return new htmlView(parent, html, width, height, options)
-}
-
-const htmlView = class extends ElementComposer{
-    constructor(parent, html, width, height, options){
-        super(parent, width, height, options, 'HtmlView');
-
-        console.info(`#${idCount()}`)
-        console.info(`addHtmlView() : ${width},${height},${options}`)
-
-        this._html = html;
-        this._create()
-    }
-
-    _create(){
-        //TODO
-        this.element = document.createDocumentFragment()
-    }
-}
-
-/**
- * Adds an Iframe but loads only websites not HTML
- * @param {object} parent 
- * @param {URL} url 
- * @param {number} width 
- * @param {number} height 
- * @param {options} options 
- * @returns 
- */
-ui.addWebView = function(parent, url, width, height, options){
-    return new webView(parent, url, width, height, options)
-}
-
-const webView = class extends ElementComposer{
-    constructor(parent, url, width, height, options){
-        super(parent, width, height, options, 'WebView');
-
-        this.url = url;
-        //TODO
-    }
-}
 
 /**
  * Creates a signal.
