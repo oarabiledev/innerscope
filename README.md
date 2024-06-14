@@ -12,7 +12,7 @@ the Innerscope.js Syntax ?
 I am activley trying to create a framework which doesn't abstract too much at the same time being
 as well optimized and easy to use and intergrate with existing projects.
 
-You can use innerscope in the browser and through node,
+The project is hosted on node and installable as ,
 
 ```npm i innerscope```
 
@@ -22,7 +22,7 @@ and as a script tag as
 
 also using another cdn
 
-```<script src="https://cdn.jsdelivr.net/npm/innerscope@0.0.6/innerscope.min.js"></script>```
+```<script src="https://cdn.jsdelivr.net/npm/innerscope@0.0.7/innerscope.min.js"></script>```
 
 ## A proof of concept
 
@@ -34,12 +34,6 @@ Then create the typical index.html file.
 <head>
     <meta name="viewport" 
     content="width=device-width, initial-scale=1.0" />
-    <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-    />
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/20.0.0/tween.umd.js"></script>
     
     <script src="https://unpkg.com/innerscope.js"></script>
     <script src="App.js"></script>
@@ -68,7 +62,7 @@ class Application {
   onStart () {
      let lay = ui.addLayout('linear','fillXY')
 
-     let btn = ui.addElement(lay, 'button', 0.02,0.2, '');
+     let btn = ui.createElement(lay, 'button', 0.02,0.2,'draggable');
      btn.textContent = 'InnerScope JS'
      btn.onTouch(()=>{
         console.log(`A showcase of InnerScope.js`)
@@ -82,7 +76,7 @@ However if you are ESM first then do it this way :
 
 You import the esm version of the script.
 
-```https://unpkg.com/innerscope@0.0.6/innerscope.esm.js```
+```https://unpkg.com/innerscope@0.0.4/innerscope.esm.js```
 
 Your Html file should have this structure.
 
@@ -92,13 +86,6 @@ Your Html file should have this structure.
 <head>
     <meta name="viewport" 
     content="width=device-width, initial-scale=1.0" />
-
-    <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-    />
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/20.0.0/tween.umd.js"></script>
 
     <script type="module" src="innerscope.esm.js"></script>
     <script type="module" src="App.js"></script>
@@ -129,7 +116,7 @@ class Application {
     onStart () {
         let lay = ui.createLayout("linear", "fillxy,top" )
 
-        let btn = ui.addElement(lay, 'button', 0.2, 0.05, '')
+        let btn = ui.createElement(lay, 'button', 0.2, 0.05, 'autofocus')
         btn.textContent = 'InnerScope'
         btn.onTouch(()=>{
             console.log(`A showcase of InnerScope.js`)
@@ -141,9 +128,6 @@ class Application {
 
 window.Application = Application;
 ```
-
-To build a new project, download the inxTemplate.zip file from releases tab and
-get started, good luck coding >3.
 
 For more information check the GET_STARTED.md documentation in the docs folder.
 Thank You For The Interest ❣️❣️❣️
