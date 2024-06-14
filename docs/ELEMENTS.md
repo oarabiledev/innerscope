@@ -118,16 +118,9 @@ and use a js substring method to get the text inside.
 When you create an elemnt this way, it will inherit these properties and methods you
 dont have to create your own self.
 
-- setPosition
-- setPadding
-- setMargins
 - bindSignal
 - addChild
-- animate
-- tween
 - onTouch
-- setScale
-- setSize
 - showIf
 - show
 - hide
@@ -137,10 +130,12 @@ For further information on these methods check the METHODS Documentation.
 
 Also if you want pixel units to be converted to the 0 to 1 scale
 use this function -- ```pxToDeviceRatio(value, side)```.
-Side can be 'width' or 'height'.
+Side can be 'w' for width or 'h' for height.
 
 For an elements with many document.createElement() Api's I advice you
 use **DocumentFragments**
 Also reduce usage of innerHTML, that causes a re-render by the web engine
 of the HTML, that is time consuming and makes apps slow.
 I also recommend using the destroy function instead of hide or gone for components that will not return.
+
+To build a new project, download the inxTemplate.zip file from releases tab and get started, good luck coding >3, a sample html tag made sample is also inside.
