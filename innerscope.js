@@ -175,7 +175,7 @@ const pxToDeviceRatio = function pxToDeviceRatio(val, side){
  * @param {string} objectInfo 
  */
 const ElementComposer = class ElementComposer {
-    constructor(parent, width, height, options = null, object){
+    constructor(parent, width = -1, height = -1, options = null, object = 'HTMLElement'){
         this.id = idCount();
         
         this.width = width;
@@ -223,17 +223,19 @@ const ElementComposer = class ElementComposer {
         
         // Options Stuff
 
-        if (typeof this.options == 'string'){
-            let noOfOptions = this.options.split(',').length;
-
-            // Will loop over options and set em to true
-            for (let x = 0 ; x < noOfOptions ; x ++){
-                this.element[x] = true;
+        if (typeof this.options === 'string') {
+            let optionsArray = this.options.split(',');
+            let noOfOptions = optionsArray.length;
+        
+            for (let x = 0; x < noOfOptions; x++) {
+                this.composer[optionsArray[x].trim()] = true;
             }
         }
-        else { ; }
         
+        else { ; }
+
         this.element = this.composer;
+        
         this.parent.addChild(this);
 
     }
@@ -384,7 +386,7 @@ function layoutObject(type = 'Linear', options = 'FillXY'){
         }
     }
     
-    this.getType = () =>{
+    this.type = () =>{
         return layout;
     }
 
@@ -498,6 +500,15 @@ function styleElement(layout, type, options) {
  * @returns HTMLELEMENT
  */
 
+/**
+ * Allows you to create an HTMLElement
+ * @param {layout} parent 
+ * @param {HTMLElement} element 
+ * @param {number} width 
+ * @param {number} height 
+ * @param {string} options 
+ * @returns HTMLElement
+ */
 ui.createElement = function(parent, element, width, height, options){
     return new htmlElement(parent, element, width, height, options)
 }
@@ -518,7 +529,7 @@ const htmlElement = class extends ElementComposer{
             this.element.style.height = heightComposer(this.height);
         }
         this.composer.appendChild(this.element);
-
+        
         /**
          * The proxy allows us to call js methods so as
          * the ones of ElementComposer.
@@ -541,6 +552,25 @@ const htmlElement = class extends ElementComposer{
             }
         });
     }
+}
+
+/**
+ * Hi, I dont know which function should be recommended so 
+ * Im gonna add it to return the HTMLElement
+ */
+
+/**
+ * Allows you to create an HTMLElement
+ * @param {layout} parent 
+ * @param {HTMLElement} element 
+ * @param {number} width 
+ * @param {number} height 
+ * @param {string} options 
+ * @returns HTMLElement
+ */
+
+ui.addHTMLElement = function(parent, element, width, height, options){
+    return new htmlElement(parent, element, width, height, options)
 }
 
 
