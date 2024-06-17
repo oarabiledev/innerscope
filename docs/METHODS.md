@@ -1,6 +1,6 @@
 # ```innerscope.js Methods```
 
-You app will use the function ui.addElement().
+You app will use the function ui.addHTMLElement().
 
 This function allows you to add an html element, a custom element even so.
 
@@ -10,7 +10,7 @@ Here is a list of them, and proposed methods :
 
 ## addChild
 
-addChild is the counterpart of appendChild, however if you use appendChild on a variable using ui.addElement().
+addChild is the counterpart of appendChild, however if you use appendChild on a variable using ui.addHTMLElement().
 You will get an error 'Illegal return statement'.
 
 > [!NOTE]
@@ -32,7 +32,7 @@ let navBar = ui.createElement(lay, 'nav', 1, pxToDeviceRatio(64,'h'), '')
         navBar.addChild(githubIcon)
 ```
 
-It is basically used to add elements called using `document.createElement()` on an element called with `ui.addElement()`.
+It is basically used to add elements called using `document.createElement()` on an element called with `ui.addHTMLElement()`.
 
 > [!NOTE]
 > In that example, I recommend you build a custom function or a extend the HTMLElement Class.

@@ -13,7 +13,7 @@ in a product.
 When extending the ElementComposer class it will allow you to inherit pre- written
 methods.
 
-You can also build ui by using the ui.createElement function, you pass HTMLElements and even custom ones.
+You can also build ui by using the ui.addHTMLElement function, you pass HTMLElements and even custom ones.
 
 To get started add your index.html file in the same directory as your App.js file.
 
@@ -101,7 +101,7 @@ InnerScope.js takes a different approach.
 
 Instead of using the document.createElement() api, we use a custom function called
 
-ui.createElement()
+ui.addHTMLElement()
 
 This allows us to extend the ElementComposer class, which means you can then use features like
 
@@ -114,12 +114,12 @@ And use document.createElement() methods like
 
 - textContent
 
-This is so because the ui.createElement() will return a proxy allowing us to do this.
+This is so because the ui.addHTMLElement() will return a proxy allowing us to do this.
 
 The syntax for this function is:
 
 ```javascript
-ui.createElement(parent, element, width, height, options)
+ui.addHTMLElement(parent, element, width, height, options)
 ```
 
 > [!NOTE]
@@ -145,7 +145,7 @@ class Application {
     onStart () {
         let lay = ui.createLayout("linear", "fillxy,top" )
 
-        let btn = ui.createElement(lay, 'button', 0.2, 0.05)
+        let btn = ui.addHTMLElement(lay, 'button', 0.2, 0.05)
 
         /* Usage Of Dom Method */
 
