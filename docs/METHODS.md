@@ -17,7 +17,7 @@ You will get an error 'Illegal return statement'.
 > Here is when addChild is used :
 
 ```javascript
-let navBar = ui.createElement(lay, 'nav', 1, pxToDeviceRatio(64,'h'), '')
+let navBar = ui.addHTMLElement(lay, 'nav')
         navBar.className = 'nav'
 
         let navTitle = document.createElement('span');

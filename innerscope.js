@@ -8,6 +8,8 @@
  * 
  *  start using this dangerous drug.
  * - Rita L. Atikson et al. 
+ * 
+ * Version 0.0.8
  */
 
 'use strict'
@@ -172,7 +174,7 @@ export const ui = new function() {
  * @param {string} options 
  * @param {string} objectInfo 
  */
-class ElementComposer {
+export class ElementComposer {
     constructor(parent, width = -1, height = -1, options = null, object = 'HTMLElement') {
         this.id = idCount();
         this.width = width;

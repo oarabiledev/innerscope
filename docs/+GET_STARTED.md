@@ -26,8 +26,8 @@ Your html file should look like this:
     <meta name="viewport" 
     content="width=device-width, initial-scale=1.0" />
     
-    <script src="https://unpkg.com/innerscope.js"></script>
-    <script src="App.js"></script>
+    <script type="module" src="https://unpkg.com/innerscope.js"></script>
+    <script type="module" src="App.js"></script>
     <style>
         html, body {
             width: 100%;
@@ -39,37 +39,12 @@ Your html file should look like this:
     </style>
 </head>
 
-<body onload="App = new Application();App.onStart();">
+<body>
     
 </body>
 
 </html>
 ```
-
-HTML Optimization for ESM :
-
-```html
-<script type="module" src="innerscope.js"></script>
-<script type="module" src="App.js"></script>
-```
-
-And with the App.js file in the same directory should have this format.
-I force usage of classes as it will run in strict mode, which will help
-developers not to make some js pitfalls.
-
-App.js File :
-
-```javascript
-class Application {
-    onStart () {
-        let lay = ui.createLayout('linear')
-        lay.setBackColor('green')
-        ui.addLayout(lay)
-    }
-}
-```
-
-For ESM:
 
 ```javascript
 import { ui } from "./innerscope.js"
@@ -83,7 +58,7 @@ class Application {
     }
 }
 
-window.Application = Application;
+export default Application;
 ```
 
 The infastructure of your app, and class are you should also have more functions.
@@ -140,7 +115,7 @@ Also take note :
 A simple example is :
 
 ```javascript
-
+import { ui } from './innerscope.js'
 class Application {
     onStart () {
         let lay = ui.createLayout("linear", "fillxy,top" )

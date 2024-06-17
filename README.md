@@ -22,7 +22,7 @@ and as a script tag as
 
 also using another cdn
 
-```<script src="https://cdn.jsdelivr.net/npm/innerscope@0.0.7/innerscope.min.js"></script>```
+```<script src="https://cdn.jsdelivr.net/npm/innerscope@0.0.8/innerscope.min.js"></script>```
 
 ## A proof of concept
 
@@ -35,59 +35,7 @@ Then create the typical index.html file.
     <meta name="viewport" 
     content="width=device-width, initial-scale=1.0" />
     
-    <script src="https://unpkg.com/innerscope.js"></script>
-    <script src="App.js"></script>
-    <style>
-        html, body {
-            width: 100%;
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-        }
-    </style>
-</head>
-
-<body onload="App = new Application();App.onStart();">
-    
-</body>
-
-</html>
-```
-
-After this, we add our App.js file where all ui is called.
-
-```javascript
-class Application {
-  onStart () {
-     let lay = ui.addLayout('linear','fillXY')
-
-     let btn = ui.createElement(lay, 'button', 0.02,0.2,'draggable');
-     btn.textContent = 'InnerScope JS'
-     btn.onTouch(()=>{
-        console.log(`A showcase of InnerScope.js`)
-     })
-     ui.addLayout(lay)
-   }
-}
-```
-
-However if you are ESM first then do it this way :
-
-You import the esm version of the script.
-
-```https://unpkg.com/innerscope@0.0.4/innerscope.esm.js```
-
-Your Html file should have this structure.
-
-```html
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" 
-    content="width=device-width, initial-scale=1.0" />
-
-    <script type="module" src="innerscope.esm.js"></script>
+    <script type="module" src="https://unpkg.com/innerscope.js"></script>
     <script type="module" src="App.js"></script>
     <style>
         html, body {
@@ -100,33 +48,31 @@ Your Html file should have this structure.
     </style>
 </head>
 
-<body onload="let App = new Application(); App.onStart();">
-
+<body>
+    
 </body>
 
 </html>
 ```
 
-And your App.js file in this format:
+After this, we add our App.js file where all ui is called.
 
 ```javascript
-import { ui } from "./innerscope.js"
-
+import { ui } from './innerscope.js'
 class Application {
-    onStart () {
-        let lay = ui.createLayout("linear", "fillxy,top" )
+  onStart () {
+     let lay = ui.addLayout('linear','fillXY')
 
-        let btn = ui.createElement(lay, 'button', 0.2, 0.05, 'autofocus')
-        btn.textContent = 'InnerScope'
-        btn.onTouch(()=>{
-            console.log(`A showcase of InnerScope.js`)
-        })
-        
-        ui.addLayout(lay)
-    }
+     let btn = ui.addHTMLElement(lay, 'button', 0.02,0.2,'draggable');
+     btn.textContent = 'InnerScope JS'
+     btn.onTouch(()=>{
+        console.log(`A showcase of InnerScope.js`)
+     })
+     ui.addLayout(lay)
+   }
 }
 
-window.Application = Application;
+export default Application;
 ```
 
 For more information check the GET_STARTED.md documentation in the docs folder.

@@ -1,5 +1,4 @@
-
-## Providing Debug
+# Providing Debug
 
 This is for plugin creators and interface designers.
 
