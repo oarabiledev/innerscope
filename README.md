@@ -2,7 +2,7 @@
 # `Euphoria Is A Feeling, The Exact Purpose Of This...`
 
 > [!NOTE]
-> innerscope is now viewml, so please check the viewml repo >3
+> innerscope is now roseview, so please check the roseview repo >3
 
 HTML gets nested and XML Tags keep drowning me in and can't find whether i set
 'search' as an id or a class.
